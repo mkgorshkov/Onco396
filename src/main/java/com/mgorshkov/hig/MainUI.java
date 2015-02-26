@@ -11,6 +11,7 @@ import com.mgorshkov.hig.Model.Patient;
 import com.mgorshkov.hig.business.SessionBean;
 import com.mgorshkov.hig.entities.Alias;
 import com.mgorshkov.hig.view.MainView;
+import com.mgorshkov.hig.view.TableView;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -34,7 +35,6 @@ import java.util.Set;
  *
  */
 @Theme("mytheme")
-@PreserveOnRefresh
 @CDIUI(value = "")
 @Widgetset("com.mgorshkov.hig.MyAppWidgetset")
 public class MainUI extends UI {
@@ -57,7 +57,7 @@ public class MainUI extends UI {
         setContent(layout);
 
         setNavigation();
-        navigator.navigateTo(MainView.VIEW_NAME);
+        navigator.navigateTo(TableView.VIEW_NAME);
     }
 
 //    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
@@ -68,6 +68,7 @@ public class MainUI extends UI {
     private void setNavigation() {
         navigator = new Navigator(this, this);//creation du navigator en lui disant de mettre les vues dans layoutView
         navigator.addView(MainView.VIEW_NAME, MainView.class);
+        navigator.addView(TableView.VIEW_NAME, TableView.class);
         navigator.addProvider(viewProvider);//provider qui va gérer les accès au vu en fonction du role de l'utilisateur
         setNavigator(navigator);
     }
