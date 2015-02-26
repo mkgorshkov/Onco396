@@ -1,5 +1,6 @@
 package com.mgorshkov.hig.Model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,6 +12,7 @@ public class Patient {
 
     public Patient(int patient){
         PatientSerNum = patient;
+        DataPoints = new HashSet<>();
     }
 
     public void addDataPoint(DataPoint d){

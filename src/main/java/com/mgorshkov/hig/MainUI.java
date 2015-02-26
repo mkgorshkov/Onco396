@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.annotation.WebServlet;
 
+import com.mgorshkov.hig.Model.Patient;
 import com.mgorshkov.hig.business.SessionBean;
 import com.mgorshkov.hig.entities.Alias;
 import com.mgorshkov.hig.view.MainView;
@@ -25,7 +26,9 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -44,9 +47,12 @@ public class MainUI extends UI {
     SessionBean bean;
     Navigator navigator;
     final VerticalLayout layout = new VerticalLayout();
+    private Set<Patient> patientData;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        patientData = new HashSet<>();
+
         layout.setMargin(true);
         setContent(layout);
 
@@ -72,5 +78,22 @@ public class MainUI extends UI {
 
     public SessionBean getSessionBean(){
         return bean;
+    }
+
+    public Set<Patient> getPatientData() {
+        return patientData;
+    }
+
+    public Patient isInPatientData(int setNum){
+        for(Patient p : patientData){
+            if(p.getPatientSerNum() == setNum){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void setPatientData(Set<Patient> patientData) {
+        this.patientData = patientData;
     }
 }
