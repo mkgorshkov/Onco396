@@ -1,0 +1,1 @@
+$wnd.com_mgorshkov_hig_MyAppWidgetset.runAsyncCallback2('S9(1510,1,dId);_.tc=function R7b(){nWb((!gWb&&(gWb=new sWb),gWb),this.a.d)};LBd(Oh)(2);\n//# sourceURL=com.mgorshkov.hig.MyAppWidgetset-2.js\n')
