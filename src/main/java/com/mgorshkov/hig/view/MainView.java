@@ -10,14 +10,13 @@ import com.mgorshkov.hig.entities.Appointment;
 import com.mgorshkov.hig.entities.Task;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.*;
+import com.vaadin.addon.charts.model.style.SolidColor;
+import com.vaadin.addon.charts.model.style.Style;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -40,6 +39,7 @@ public class MainView extends VerticalLayout implements View {
     public final static String VIEW_NAME = "";
     private Label statusLabel = new Label("Start.");
     Set<Patient> workingSet = new HashSet<>();
+    TabSheet tabsheet = new TabSheet();
 
     public void init(){
         setSizeFull();
@@ -51,9 +51,12 @@ public class MainView extends VerticalLayout implements View {
         addComponent(statusLabel);
         setEntityManager();
         addAppointmentsToUsers();
-        addFirstTaskToUsers();
-        filterUsers();
-        showGraph();
+//        addFirstTaskToUsers();
+//        filterUsers();
+
+//        addComponent(tabsheet);
+
+//        addTabsheet();
 
         setExpandRatio(statusLabel, 0.1f);
     }
@@ -75,11 +78,14 @@ public class MainView extends VerticalLayout implements View {
     }
 
     private void getAppointment(){
-        TypedQuery<Appointment> query = entityManager.createNamedQuery("Appointment.findAll", Appointment.class);
+        TypedQuery<Appointment> query = entityManager.createNamedQuery("Appointment.findByAlias", Appointment.class);
+        query.setParameter("aSerNum", new BigInteger("3"));
         List<Appointment> appointmentList = query.getResultList();
 
+        System.out.println(appointmentList.size());
+
         for(Appointment app : appointmentList){
-            if(app.getAliasSerNum().equals(new BigInteger("3")) && !app.getStatus().equals("Cancelled") && !app.getStatus().equals("Open")){
+            if(!app.getStatus().equals("Cancelled") && !app.getStatus().equals("Open")){
 
                 Patient crtPatient = isInPatientData(app.getPatientSerNum());
 
@@ -163,16 +169,35 @@ public class MainView extends VerticalLayout implements View {
         return null;
     }
 
-    private void showGraph(){
+    private void showGraphOne(){
+        double mean = 0;
+
         Chart chart = new Chart(ChartType.COLUMN);
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Waiting Time: CT-Sim to Initial Contour");
 
         XAxis x = new XAxis();
         x.setTitle("Patient SerNum");
+        conf.addxAxis(x);
 
         YAxis y = new YAxis();
         y.setTitle("Waiting Time (Hours)");
+        conf.addyAxis(y);
+
+        PlotLine plotLine = new PlotLine();
+        plotLine.setColor(new SolidColor("red"));
+        plotLine.setWidth(1);
+        plotLine.setzIndex(0);
+        plotLine.setDashStyle(DashStyle.DASHDOT);
+
+        PlotLine plotLine2 = new PlotLine();
+        plotLine.setColor(new SolidColor("orange"));
+        plotLine.setWidth(1);
+        plotLine.setzIndex(0);
+        plotLine.setDashStyle(DashStyle.DASHDOT);
+
+
+        y.setPlotLines(plotLine, plotLine2);
 
         Tooltip tooltip = new Tooltip();
         tooltip.setFormatter("''+this.x +''+' Patient with: '"
@@ -190,16 +215,98 @@ public class MainView extends VerticalLayout implements View {
             System.out.println(p.calculateFirstWait());
             categories[i] = ""+p.getPatientSerNum();
             i++;
+            mean += p.calculateFirstWait();
         }
+
+        mean = mean/workingSet.size();
+        plotLine.setValue(mean);
+        PlotBandLabel label = new PlotBandLabel("Theoretical mean: "+mean);
+        label.setAlign(HorizontalAlign.CENTER);
+        Style style = new Style();
+        style.setColor(new SolidColor("gray"));
+        label.setStyle(style);
+        plotLine.setLabel(label);
+
 
         x.setCategories(categories);
 
+        double sd = 0;
+        for (int j=0; j<values.length;j++)
+        {
+            sd = sd + Math.pow((Double.parseDouble(values[j].toString()) - mean), 2);
+        }
+
+
+        plotLine2.setValue(mean+sd);
+        PlotBandLabel label2 = new PlotBandLabel("Mean + SD: "+(mean+sd));
+        label.setAlign(HorizontalAlign.CENTER);
+        Style style2 = new Style();
+        style2.setColor(new SolidColor("gray"));
+        label.setStyle(style2);
+        plotLine2.setLabel(label2);
+
+
         conf.addSeries(new ListSeries("First Wait", values));
         chart.setSizeFull();
-        addComponent(chart);
+        tabsheet.addTab(chart, "First Waiting Time - Everyone");
+    }
 
-        setExpandRatio(chart, 0.9f);
+    private void showGraphTwo(){
+        Chart chart = new Chart(ChartType.COLUMN);
+        Configuration conf = chart.getConfiguration();
+        conf.setTitle("Sample Waiting Times");
+        conf.setSubTitle("Patient 1234");
 
+        XAxis x = new XAxis();
+        x.setTitle("Patient SerNum");
+        conf.addxAxis(x);
+
+        YAxis y = new YAxis();
+        y.setTitle("Waiting Time (Hours)");
+        conf.addyAxis(y);
+
+        PlotLine plotLine = new PlotLine();
+        plotLine.setColor(new SolidColor("red"));
+        plotLine.setValue(55);
+        plotLine.setWidth(1);
+        plotLine.setzIndex(0);
+        plotLine.setDashStyle(DashStyle.DASHDOT);
+        PlotBandLabel label = new PlotBandLabel("Theoretical mean: 55");
+        label.setAlign(HorizontalAlign.LEFT);
+        Style style = new Style();
+        style.setColor(new SolidColor("red"));
+        label.setStyle(style);
+        plotLine.setLabel(label);
+
+        y.setPlotLines(plotLine);
+
+
+        Tooltip tooltip = new Tooltip();
+        tooltip.setFormatter("''+this.x +''+' Patient with: '"
+                + "+ Highcharts.numberFormat(this.y, 1) +' hours wait'");
+        conf.setTooltip(tooltip);
+
+
+        conf.addSeries(new ListSeries("First Wait", 12));
+        conf.addSeries(new ListSeries("Second Wait", 15));
+        conf.addSeries(new ListSeries("Third Wait", 70));
+        conf.addSeries(new ListSeries("Fourth Wait", 70));
+        conf.addSeries(new ListSeries("Fifth Wait", 90));
+        conf.addSeries(new ListSeries("Sixth Wait", 12));
+        conf.addSeries(new ListSeries("Seventh Wait", 23));
+        conf.addSeries(new ListSeries("Eighth Wait", 2));
+
+
+        chart.setSizeFull();
+        tabsheet.addTab(chart, "Waiting Times - Patient 1234");
+    }
+
+    private void addTabsheet(){
+        tabsheet.setSizeFull();
+        setExpandRatio(tabsheet, 0.9f);
+
+        showGraphOne();
+        showGraphTwo();
     }
 
     @Override
