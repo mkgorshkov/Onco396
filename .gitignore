@@ -1,0 +1,13 @@
+*.settings/
+target/
+gwt-unitCache/
+widgetsets/
+*.classpath
+*.project
+.~*
+*.class
+bin/
+*.metadata/
+*.sass-cache/
+/tools/vagrant/fabfile.py
+*.iml
