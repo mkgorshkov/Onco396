@@ -11,3 +11,4 @@ bin/
 *.sass-cache/
 /tools/vagrant/fabfile.py
 *.iml
+*.idea/
