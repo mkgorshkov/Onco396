@@ -15,7 +15,8 @@ import java.util.Date;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "Appointment.findAll", query = "SELECT a FROM Appointment a"),
-        @NamedQuery(name = "Appointment.findByAlias", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum")
+        @NamedQuery(name = "Appointment.findByAlias", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum"),
+        @NamedQuery(name = "Appointment.findByAliasAndStatus", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum and a.Status not like :aStatus and a.Status not like :aStatus2")
 })
 public class Appointment implements Serializable{
     private static final long serialVersionUID = 1L;

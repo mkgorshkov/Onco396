@@ -15,6 +15,7 @@ import java.util.Date;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
+        @NamedQuery(name = "Task.findByAliasAndStatus", query = "SELECT t FROM Task t where t.AliasSerNum=:aSerNum and t.Status not like :aStatus and t.Status not like :aStatus2")
 })
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;

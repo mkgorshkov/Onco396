@@ -1,24 +1,20 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
-import com.mgorshkov.hig.Model.DataPoint;
-import com.mgorshkov.hig.Model.DataPointType;
-import com.mgorshkov.hig.Model.Patient;
-import com.mgorshkov.hig.business.SessionBean;
-import com.mgorshkov.hig.entities.Alias;
+import com.mgorshkov.hig.model.DataPoint;
+import com.mgorshkov.hig.model.DataPointType;
+import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.entities.Appointment;
 import com.mgorshkov.hig.entities.Task;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.*;
 import com.vaadin.addon.charts.model.style.SolidColor;
 import com.vaadin.addon.charts.model.style.Style;
-import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

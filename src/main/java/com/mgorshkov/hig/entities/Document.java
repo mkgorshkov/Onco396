@@ -15,6 +15,7 @@ import java.util.Date;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "Document.findAll", query = "SELECT d FROM Document d"),
+        @NamedQuery(name = "Document.findByAlias", query = "SELECT d FROM Document d where d.AliasSerNum = 9 or d.AliasSerNum= 20 or d.AliasSerNum = 21 or d.AliasSerNum = 29")
 })
 public class Document implements Serializable {
     private static final long serialVersionUID = 1L;

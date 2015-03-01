@@ -1,4 +1,4 @@
-package com.mgorshkov.hig.Model;
+package com.mgorshkov.hig.model;
 
 import java.util.Date;
 

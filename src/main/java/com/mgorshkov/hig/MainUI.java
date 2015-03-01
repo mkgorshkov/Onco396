@@ -4,32 +4,23 @@ import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.servlet.annotation.WebServlet;
 
-import com.mgorshkov.hig.Model.Patient;
+import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.business.SessionBean;
-import com.mgorshkov.hig.entities.Alias;
 import com.mgorshkov.hig.view.MainView;
+import com.mgorshkov.hig.view.PatientSummaryView;
 import com.mgorshkov.hig.view.TableView;
 import com.mgorshkov.hig.view.TimeTrialView;
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIViewProvider;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -58,7 +49,7 @@ public class MainUI extends UI {
         setContent(layout);
 
         setNavigation();
-        navigator.navigateTo(MainView.VIEW_NAME);
+        navigator.navigateTo(TimeTrialView.VIEW_NAME);
     }
 
 //    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
@@ -71,6 +62,7 @@ public class MainUI extends UI {
         navigator.addView(MainView.VIEW_NAME, MainView.class);
         navigator.addView(TableView.VIEW_NAME, TableView.class);
         navigator.addView(TimeTrialView.VIEW_NAME, TimeTrialView.class);
+        navigator.addView(PatientSummaryView.VIEW_NAME, PatientSummaryView.class);
         navigator.addProvider(viewProvider);//provider qui va gérer les accès au vu en fonction du role de l'utilisateur
         setNavigator(navigator);
     }

@@ -1,10 +1,7 @@
-package com.mgorshkov.hig.Model;
+package com.mgorshkov.hig.model;
 
-import java.time.Period;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
