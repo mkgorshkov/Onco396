@@ -49,13 +49,8 @@ public class MainUI extends UI {
         setContent(layout);
 
         setNavigation();
-        navigator.navigateTo(TimeTrialView.VIEW_NAME);
+        //navigator.navigateTo(MainView.VIEW_NAME);
     }
-
-//    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-//    @VaadinServletConfiguration(ui = MainUI.class, productionMode = false)
-//    public static class MyUIServlet extends VaadinServlet {
-//    }
 
     private void setNavigation() {
         navigator = new Navigator(this, this);//creation du navigator en lui disant de mettre les vues dans layoutView
