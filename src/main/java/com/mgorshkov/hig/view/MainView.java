@@ -1,6 +1,8 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.filters.AddAllData;
+import com.mgorshkov.hig.filters.FilterByStage;
+import com.mgorshkov.hig.filters.FilterExtremes;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.cdi.UIScoped;
@@ -24,14 +26,22 @@ public class MainView extends VerticalLayout implements View {
     EntityManager entityManager;
     public final static String VIEW_NAME = "";
     Set<Patient> workingSet = new HashSet<>();
-    AddAllData addDataFilter;
+    AddAllData initialData;
+    FilterByStage filterStage;
+    FilterExtremes filterExtremes;
 
     public void init(){
         setSizeFull();
         setMargin(true);
         setSpacing(true);
 
-        addDataFilter = new AddAllData();
+        initialData = new AddAllData();
+        workingSet = initialData.getWorkingSet();
+
+        filterStage = new FilterByStage(workingSet);
+        workingSet = filterStage.getWorkingSet();
+
+        filterExtremes = new FilterExtremes(workingSet);
     }
 
     @Override
