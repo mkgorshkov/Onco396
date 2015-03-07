@@ -5,8 +5,9 @@ import com.mgorshkov.hig.entities.Appointment;
 import com.mgorshkov.hig.entities.Document;
 import com.mgorshkov.hig.entities.Task;
 import com.mgorshkov.hig.model.DataPoint;
-import com.mgorshkov.hig.model.DataPointType;
+import com.mgorshkov.hig.model.enums.DataPointType;
 import com.mgorshkov.hig.model.Patient;
+import com.mgorshkov.hig.model.enums.Stage;
 import com.vaadin.ui.UI;
 
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ public class AddAllData {
     private EntityManager entityManager;
     private Set<Patient> workingSet = new HashSet<>();
 
-    boolean setDebug = true;
+    boolean setDebug = true; //Apologies to the JAVA gods for flag programming.
 
     public AddAllData(){
 
@@ -35,7 +36,7 @@ public class AddAllData {
         if(setDebug){
             addAllDebug();
         }else{
-            //addAll();
+            addAll();
         }
 
     }
@@ -63,6 +64,12 @@ public class AddAllData {
 
     }
 
+    private void addAll(){
+        addAppointment();
+        addTasks();
+        addDocuments();
+    }
+
     private void addAppointment(){
 
         TypedQuery<Appointment> directQuery = entityManager.createNamedQuery("Appointment.findByAliasAndStatus", Appointment.class);
@@ -77,10 +84,10 @@ public class AddAllData {
 
             if(ifExists == null){
                 Patient newPatient = new Patient(a.getPatientSerNum());
-                newPatient.addDataPoint(new DataPoint(a.getScheduledStartTime(), DataPointType.APPOINTMENT));
+                newPatient.addDataPoint(new DataPoint(a.getScheduledStartTime(), DataPointType.APPOINTMENT, Stage.CT_SCAN));
                 workingSet.add(newPatient);
             }else{
-                ifExists.addDataPoint(new DataPoint(a.getScheduledStartTime(), DataPointType.APPOINTMENT));
+                ifExists.addDataPoint(new DataPoint(a.getScheduledStartTime(), DataPointType.APPOINTMENT, Stage.CT_SCAN));
             }
         }
 
@@ -125,7 +132,23 @@ public class AddAllData {
             Patient ifExists = isInPatientData(a.getPatientSerNum());
 
             if(ifExists != null){
-                ifExists.addDataPoint(new DataPoint(a.getCreationDate(), DataPointType.TASK));
+                Stage toUse = Stage.READY_FOR_TREATMENT; //Instead of checking for 19 at the end
+
+                if(a.getAliasSerNum().equals(new BigInteger("17"))){
+                    toUse = Stage.INITIAL_CONTOUR;
+                }
+                else if(a.getAliasSerNum().equals(new BigInteger("8"))){
+                    toUse = Stage.MD_CONTOUR;
+                }
+                else if(a.getAliasSerNum().equals(new BigInteger("22"))){
+                    toUse = Stage.DOSE_CALCULATION;
+
+                }
+                else if(a.getAliasSerNum().equals(new BigInteger("18"))){
+                    toUse = Stage.PHYSICS_QA;
+                }
+
+                ifExists.addDataPoint(new DataPoint(a.getCreationDate(), DataPointType.TASK, toUse));
                 tasksAdded++;
             }
         }
@@ -144,7 +167,13 @@ public class AddAllData {
             Patient ifExists = isInPatientData(d.getPatientSerNum());
 
             if(ifExists != null){
-                ifExists.addDataPoint(new DataPoint(d.getCreatedTimeStamp(), DataPointType.DOCUMENT));
+                Stage toUse = Stage.MD_APPROVE; //Instead of checking for 9 or 20 or 21 at the end
+
+                if(d.getAliasSerNum().equals(new BigInteger("29"))){
+                    toUse = Stage.CT_PLANNING_SHEET;
+                }
+
+                ifExists.addDataPoint(new DataPoint(d.getCreatedTimeStamp(), DataPointType.DOCUMENT, toUse));
                 docsAdded++;
             }
         }

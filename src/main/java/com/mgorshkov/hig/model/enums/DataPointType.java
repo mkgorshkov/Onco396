@@ -1,4 +1,4 @@
-package com.mgorshkov.hig.model;
+package com.mgorshkov.hig.model.enums;
 
 /**
  * Created by mkgo on 25/02/15.

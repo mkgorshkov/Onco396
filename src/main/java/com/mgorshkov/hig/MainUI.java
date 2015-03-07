@@ -53,12 +53,12 @@ public class MainUI extends UI {
     }
 
     private void setNavigation() {
-        navigator = new Navigator(this, this);//creation du navigator en lui disant de mettre les vues dans layoutView
+        navigator = new Navigator(this, this);
         navigator.addView(MainView.VIEW_NAME, MainView.class);
         navigator.addView(TableView.VIEW_NAME, TableView.class);
         navigator.addView(TimeTrialView.VIEW_NAME, TimeTrialView.class);
         navigator.addView(PatientSummaryView.VIEW_NAME, PatientSummaryView.class);
-        navigator.addProvider(viewProvider);//provider qui va gérer les accès au vu en fonction du role de l'utilisateur
+        navigator.addProvider(viewProvider);
         setNavigator(navigator);
     }
 
