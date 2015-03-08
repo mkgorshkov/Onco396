@@ -34,6 +34,7 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
 
     Button charts = new Button("Charts by Stage", FontAwesome.BAR_CHART_O);
     Button patients = new Button("Charts by Patient", FontAwesome.USER);
+    Button chartsTimeline = new Button("Chart by Stage - Selection", FontAwesome.FILE_TEXT);
 
     HorizontalLayout buttons = new HorizontalLayout();
 
@@ -44,9 +45,12 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
 
         charts.addClickListener(this);
         patients.addClickListener(this);
+        chartsTimeline.addClickListener(this);
 
         buttons.addComponent(charts);
+        buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
+
         buttons.setSpacing(true);
 
         addComponent(buttons);
@@ -75,6 +79,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     public void buttonClick(Button.ClickEvent clickEvent) {
         if(clickEvent.getSource().equals(charts)){
             getUI().getNavigator().navigateTo(ChartsView.VIEW_NAME);
+        }else if(clickEvent.getSource().equals(chartsTimeline)){
+            getUI().getNavigator().navigateTo(ChartsTimelineView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(patients)){
             getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
         }

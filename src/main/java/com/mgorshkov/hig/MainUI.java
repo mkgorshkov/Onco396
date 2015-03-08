@@ -52,11 +52,12 @@ public class MainUI extends UI {
     private void setNavigation() {
         navigator = new Navigator(this, this);
         navigator.addView(MainView.VIEW_NAME, MainView.class);
-        navigator.addView(TableView.VIEW_NAME, TableView.class);
-        navigator.addView(TimeTrialView.VIEW_NAME, TimeTrialView.class);
-        navigator.addView(PatientSummaryView.VIEW_NAME, PatientSummaryView.class);
+//        navigator.addView(TableView.VIEW_NAME, TableView.class);
+//        navigator.addView(TimeTrialView.VIEW_NAME, TimeTrialView.class);
+//        navigator.addView(PatientSummaryView.VIEW_NAME, PatientSummaryView.class);
         navigator.addView(ChartsView.VIEW_NAME, ChartsView.class);
         navigator.addView(PatientView.VIEW_NAME, PatientView.class);
+        navigator.addView(ChartsTimelineView.VIEW_NAME, ChartsTimelineView.class);
         navigator.addProvider(viewProvider);
         setNavigator(navigator);
     }
