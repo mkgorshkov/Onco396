@@ -7,10 +7,7 @@ import javax.persistence.PersistenceContext;
 
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.business.SessionBean;
-import com.mgorshkov.hig.view.MainView;
-import com.mgorshkov.hig.view.PatientSummaryView;
-import com.mgorshkov.hig.view.TableView;
-import com.mgorshkov.hig.view.TimeTrialView;
+import com.mgorshkov.hig.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
@@ -58,6 +55,8 @@ public class MainUI extends UI {
         navigator.addView(TableView.VIEW_NAME, TableView.class);
         navigator.addView(TimeTrialView.VIEW_NAME, TimeTrialView.class);
         navigator.addView(PatientSummaryView.VIEW_NAME, PatientSummaryView.class);
+        navigator.addView(ChartsView.VIEW_NAME, ChartsView.class);
+        navigator.addView(PatientView.VIEW_NAME, PatientView.class);
         navigator.addProvider(viewProvider);
         setNavigator(navigator);
     }

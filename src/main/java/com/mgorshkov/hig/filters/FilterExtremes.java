@@ -326,4 +326,9 @@ public class FilterExtremes {
         if(setDebug) System.out.println(workingSet.size());
         if(setDebug) System.out.println((System.currentTimeMillis() - start) +" ms");
     }
+
+    public Set<Patient> getWorkingSet() {
+        return workingSet;
+    }
+
 }
