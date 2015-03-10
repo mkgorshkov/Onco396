@@ -15,6 +15,7 @@ import java.util.Date;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "Diagnosis.findAll", query = "SELECT d FROM Diagnosis d"),
+        @NamedQuery(name = "Diagnosis.findBySer", query = "SELECT d FROM Diagnosis d where d.PatientSerNum = :patientSerNum")
 })
 public class Diagnosis implements Serializable{
     private static final long serialVersionUID = 1L;
