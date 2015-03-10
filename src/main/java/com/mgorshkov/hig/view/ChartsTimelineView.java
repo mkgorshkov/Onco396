@@ -187,7 +187,16 @@ public class ChartsTimelineView extends VerticalLayout implements View,Button.Cl
         conf.setTitle(choices[stage]);
 
         XAxis x = new XAxis();
-        x.setCategories(patientSerNums(stage));
+
+        String[] categories = new String[input.size()];
+
+        int i =0;
+        for(Patient p : input){
+            categories[i] = ""+p.getPatientSerNum();
+            i++;
+        }
+
+        x.setCategories(categories);
         x.setTitle("Patient Serial Number");
         conf.addxAxis(x);
 
@@ -235,8 +244,8 @@ public class ChartsTimelineView extends VerticalLayout implements View,Button.Cl
         }
 
         Number[] valuesToAdd = new Number[values.size()];
-        for(int i = 0; i<valuesToAdd.length; i++){
-            valuesToAdd[i] = values.get(i);
+        for(int j = 0; j<valuesToAdd.length; j++){
+            valuesToAdd[j] = values.get(j);
         }
 
         conf.setSeries(new ListSeries("", valuesToAdd));

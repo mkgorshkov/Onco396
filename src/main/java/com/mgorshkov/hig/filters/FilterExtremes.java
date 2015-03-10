@@ -13,17 +13,18 @@ public class FilterExtremes {
     private Set<Patient> workingSet;
 
     boolean setDebug = true; //Apologies to the JAVA gods for flag programming.
+    boolean removeZeros = true;
 
     public FilterExtremes(Set<Patient> workingSet){
         this.workingSet = workingSet;
 
-        calculateFirstWaiting();
-        calculateSecondWaiting();
-        calculateThirdWaiting();
-        calculateFourthWaiting();
-        calculateFifthWaiting();
-        calculateSixthWaiting();
-        calculateSeventhWaiting();
+            calculateFirstWaiting();
+            calculateSecondWaiting();
+            calculateThirdWaiting();
+            calculateFourthWaiting();
+            calculateFifthWaiting();
+            calculateSixthWaiting();
+            calculateSeventhWaiting();
     }
 
     private void calculateFirstWaiting(){
@@ -60,7 +61,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFirstWait() > totalForAverage + standardDeviation){
+            if(p.calculateFirstWait() > totalForAverage + standardDeviation || p.calculateFirstWait() == 0){
                 it.remove();
             }
         }
@@ -103,7 +104,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSecondWait() > totalForAverage + standardDeviation){
+            if(p.calculateSecondWait() > totalForAverage + standardDeviation || p.calculateSecondWait() == 0){
                 it.remove();
             }
         }
@@ -146,7 +147,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateThirdWait() > totalForAverage + standardDeviation){
+            if(p.calculateThirdWait() > totalForAverage + standardDeviation || p.calculateThirdWait() == 0){
                 it.remove();
             }
         }
@@ -189,7 +190,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFourthWait() > totalForAverage + standardDeviation){
+            if(p.calculateFourthWait() > totalForAverage + standardDeviation || p.calculateFourthWait() == 0){
                 it.remove();
             }
         }
@@ -232,7 +233,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFifthWait() > totalForAverage + standardDeviation){
+            if(p.calculateFifthWait() > totalForAverage + standardDeviation || p.calculateFifthWait() == 0){
                 it.remove();
             }
         }
@@ -275,7 +276,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSixthWait() > totalForAverage + standardDeviation){
+            if(p.calculateSixthWait() > totalForAverage + standardDeviation || p.calculateSixthWait() == 0){
                 it.remove();
             }
         }
@@ -318,7 +319,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSeventhWait() > totalForAverage + standardDeviation){
+            if(p.calculateSeventhWait() > totalForAverage + standardDeviation || p.calculateSeventhWait() == 0){
                 it.remove();
             }
         }
