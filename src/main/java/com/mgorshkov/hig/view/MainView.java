@@ -1,6 +1,7 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
+import com.mgorshkov.hig.business.exporter.ExportToCSV;
 import com.mgorshkov.hig.filters.AddAllData;
 import com.mgorshkov.hig.filters.FilterByStage;
 import com.mgorshkov.hig.filters.FilterExtremes;
@@ -9,7 +10,9 @@ import com.vaadin.cdi.CDIView;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 
 import javax.persistence.EntityManager;
@@ -35,6 +38,7 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     Button charts = new Button("Charts by Stage", FontAwesome.BAR_CHART_O);
     Button patients = new Button("Charts by Patient", FontAwesome.USER);
     Button chartsTimeline = new Button("Chart by Stage - Selection", FontAwesome.FILE_TEXT);
+    Button exportExcel = new Button("Export as CSV", FontAwesome.FILE_EXCEL_O);
 
     HorizontalLayout buttons = new HorizontalLayout();
 
@@ -46,10 +50,12 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         charts.addClickListener(this);
         patients.addClickListener(this);
         chartsTimeline.addClickListener(this);
+        exportExcel.addClickListener(this);
 
         buttons.addComponent(charts);
         buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
+        buttons.addComponent(exportExcel);
 
         buttons.setSpacing(true);
 
@@ -65,6 +71,7 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
 
         filterExtremes = new FilterExtremes(workingSet);
         workingSet = filterExtremes.getWorkingSet();
+
         ((MainUI) getUI()).setPatientData(workingSet);
 
     }
@@ -83,6 +90,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
             getUI().getNavigator().navigateTo(ChartsTimelineView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(patients)){
             getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+        }else if(clickEvent.getSource().equals(exportExcel)){
+            ExportToCSV e = new ExportToCSV(((MainUI) getUI()).getPatientData());
         }
     }
 }
