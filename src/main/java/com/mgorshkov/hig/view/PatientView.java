@@ -44,7 +44,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
 
         setTitle();
         setCombo();
-        setCharts(1);
+        setCharts(1, isInPatientData(1).getDiagnosis());
     }
 
     private void setTitle(){
@@ -88,11 +88,12 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         return selector;
     }
 
-    private void setCharts(int patientSer){
+    private void setCharts(int patientSer, String diagnosis){
         chart = new Chart(ChartType.BAR);
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Stages: "+patientSer);
+        conf.setSubTitle("Diagnosis: "+diagnosis);
 
 
         XAxis x = new XAxis();
@@ -101,7 +102,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         conf.addxAxis(x);
 
         YAxis y = new YAxis();
-        y.setTitle("Waiting Time (Minutes)");
+        y.setTitle("Waiting Time "+(((MainUI) getUI()).getTimeUnit()));
         conf.addyAxis(y);
 
         PlotOptionsSeries plot = new PlotOptionsSeries();
@@ -150,7 +151,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
     @Override
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         removeComponent(chart);
-        setCharts((Integer) selector.getValue());
+        setCharts((Integer) selector.getValue(), isInPatientData((Integer) selector.getValue()).getDiagnosis());
     }
 
 

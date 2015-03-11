@@ -39,17 +39,18 @@ public class MainUI extends UI {
     final VerticalLayout layout = new VerticalLayout();
     private Set<Patient> patientData;
     private OncoTimeUnit globalTimeUnit;
+    private Set<String> diagnosis;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         patientData = new HashSet<>();
         globalTimeUnit = OncoTimeUnit.MINUTES;
+        diagnosis = new HashSet<>();
 
         layout.setMargin(true);
         setContent(layout);
 
         setNavigation();
-        //navigator.navigateTo(MainView.VIEW_NAME);
     }
 
     private void setNavigation() {
@@ -61,6 +62,7 @@ public class MainUI extends UI {
         navigator.addView(ChartsView.VIEW_NAME, ChartsView.class);
         navigator.addView(PatientView.VIEW_NAME, PatientView.class);
         navigator.addView(ChartsTimelineView.VIEW_NAME, ChartsTimelineView.class);
+        navigator.addView(ChartsDiagnosisView.VIEW_NAME, ChartsDiagnosisView.class);
         navigator.addProvider(viewProvider);
         setNavigator(navigator);
     }
@@ -96,5 +98,13 @@ public class MainUI extends UI {
 
     public void setPatientData(Set<Patient> patientData) {
         this.patientData = patientData;
+    }
+
+    public Set<String> getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(HashSet<String> diagnosis) {
+        this.diagnosis = diagnosis;
     }
 }

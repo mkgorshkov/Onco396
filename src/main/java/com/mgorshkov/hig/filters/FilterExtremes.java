@@ -9,6 +9,7 @@ import com.vaadin.ui.UI;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -343,9 +344,15 @@ public class FilterExtremes {
     }
 
     private void addDiagnosis(){
+        HashSet<String> diagnosis = new HashSet<>();
+
         for(Patient w : workingSet){
-            w.setDiagnosis(addDiagnosisCode(w.getPatientSerNum()));
+            String diag = addDiagnosisCode(w.getPatientSerNum());
+            w.setDiagnosis(diag);
+            diagnosis.add(diag);
         }
+
+        ((MainUI) UI.getCurrent()).setDiagnosis(diagnosis);
     }
 
     private String addDiagnosisCode(int patientSerNum){

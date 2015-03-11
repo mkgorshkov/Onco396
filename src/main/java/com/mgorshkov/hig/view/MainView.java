@@ -34,9 +34,10 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     FilterByStage filterStage;
     FilterExtremes filterExtremes;
 
-    Button charts = new Button("Charts by Stage", FontAwesome.BAR_CHART_O);
-    Button patients = new Button("Charts by Patient", FontAwesome.USER);
-    Button chartsTimeline = new Button("Chart by Stage - Selection", FontAwesome.FILE_TEXT);
+    Button charts = new Button("Stage", FontAwesome.BAR_CHART_O);
+    Button chartsByDiagnosis = new Button("Stage and Diagnosis", FontAwesome.EDIT);
+    Button patients = new Button("Patient", FontAwesome.USER);
+    Button chartsTimeline = new Button("Stage and Patient", FontAwesome.FILE_TEXT);
     Button exportExcel = new Button("Export as CSV", FontAwesome.FILE_EXCEL_O);
     Button globalOptionsButton = new Button(FontAwesome.GEARS);
     Button save = new Button(FontAwesome.SAVE);
@@ -60,10 +61,12 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         chartsTimeline.addClickListener(this);
         exportExcel.addClickListener(this);
         globalOptionsButton.addClickListener(this);
+        chartsByDiagnosis.addClickListener(this);
         save.addClickListener(this);
         cancel.addClickListener(this);
 
         buttons.addComponent(charts);
+        buttons.addComponent(chartsByDiagnosis);
         buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
         buttons.addComponent(exportExcel);
@@ -120,6 +123,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     public void buttonClick(Button.ClickEvent clickEvent) {
         if(clickEvent.getSource().equals(charts)){
             getUI().getNavigator().navigateTo(ChartsView.VIEW_NAME);
+        }else if(clickEvent.getSource().equals(chartsByDiagnosis)){
+            getUI().getNavigator().navigateTo(ChartsDiagnosisView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(chartsTimeline)){
             getUI().getNavigator().navigateTo(ChartsTimelineView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(patients)){
