@@ -23,7 +23,7 @@ import java.util.Set;
 public class ExportToCSV {
     final private static String CSV_SEPERATOR = ",";
     final private static String PATH = "results.csv";
-    final private static String[] headers = {"Patient Serial Number", "Diagnosis Code", "Priority Code", "Oncologist Serial Num", "Waiting Time 1", "Waiting Time 2", "Waiting Time 3", "Waiting Time 4", "Waiting Time 5", "Waiting Time 6", "Waiting Time 7"};
+    final private static String[] headers = {"Patient Serial Number", "Diagnosis Code", "Priority Code", "Oncologist Serial Num", "Waiting Time 1", "Waiting Time 2", "Waiting Time 3", "Waiting Time 4", "Waiting Time 5", "Waiting Time 6", "Waiting Time 7", "Total Waiting Time"};
 
     @PersistenceContext(unitName = "hig20150218")
     EntityManager entityManager;
@@ -54,6 +54,14 @@ public class ExportToCSV {
             for(Patient p : workingSet){
                 line = new StringBuffer();
 
+                Double w1 = p.calculateFirstWait(t);
+                Double w2 = p.calculateSecondWait(t);
+                Double w3 = p.calculateThirdWait(t);
+                Double w4 = p.calculateFourthWait(t);
+                Double w5 = p.calculateFifthWait(t);
+                Double w6 = p.calculateSixthWait(t);
+                Double w7 = p.calculateSeventhWait(t);
+
                 line.append(p.getPatientSerNum());
                 line.append(CSV_SEPERATOR);
                 line.append(p.getDiagnosis());
@@ -62,20 +70,23 @@ public class ExportToCSV {
                 line.append(CSV_SEPERATOR);
                 line.append(p.getOncologist());
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateFirstWait(t));
+                line.append(w1);
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateSecondWait(t));
+                line.append(w2);
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateThirdWait(t));
+                line.append(w3);
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateFourthWait(t));
+                line.append(w4);
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateFifthWait(t));
+                line.append(w5);
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateSixthWait(t));
+                line.append(w6);
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateSeventhWait(t));
+                line.append(w7);
                 line.append(CSV_SEPERATOR);
+                line.append(w1+w2+w3+w4+w5+w6+w7);
+                line.append(CSV_SEPERATOR);
+
 
                 write.write(line.toString());
                 write.newLine();
@@ -85,6 +96,7 @@ public class ExportToCSV {
             write.close();
 
         }catch(IOException e){
+            e.printStackTrace();
             System.err.println("Something went wrong outputting to CSV");
         }
 
