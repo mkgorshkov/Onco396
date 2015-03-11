@@ -14,11 +14,15 @@ public class Patient {
     private int PatientSerNum;
     private HashSet<DataPoint> DataPoints;
     private String diagnosis;
+    private String priorityCode;
+    private int oncologist;
 
     public Patient(int patient){
         PatientSerNum = patient;
         DataPoints = new HashSet<>();
         diagnosis = "";
+        oncologist = 0;
+        priorityCode = "";
     }
 
     public void addDataPoint(DataPoint d){
@@ -282,5 +286,21 @@ public class Patient {
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public String getPriorityCode() {
+        return priorityCode;
+    }
+
+    public void setPriorityCode(String priorityCode) {
+        this.priorityCode = priorityCode;
+    }
+
+    public int getOncologist() {
+        return oncologist;
+    }
+
+    public void setOncologist(int oncologist) {
+        this.oncologist = oncologist;
     }
 }

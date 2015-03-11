@@ -11,6 +11,8 @@
         <class>com.mgorshkov.hig.entities.Appointment</class>
         <class>com.mgorshkov.hig.entities.Document</class>
         <class>com.mgorshkov.hig.entities.Task</class>
+        <class>com.mgorshkov.hig.entities.Priority</class>
+        <class>com.mgorshkov.hig.entities.PatientDoctor</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update" />

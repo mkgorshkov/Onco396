@@ -2,6 +2,8 @@ package com.mgorshkov.hig.filters;
 
 import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.entities.Diagnosis;
+import com.mgorshkov.hig.entities.PatientDoctor;
+import com.mgorshkov.hig.entities.Priority;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.vaadin.ui.UI;
@@ -350,6 +352,12 @@ public class FilterExtremes {
             String diag = addDiagnosisCode(w.getPatientSerNum());
             w.setDiagnosis(diag);
             diagnosis.add(diag);
+
+            String priority = addPriorityCode(w.getPatientSerNum());
+            w.setPriorityCode(priority);
+
+            int onco = addOncologistSerial(w.getPatientSerNum());
+            w.setOncologist(onco);
         }
 
         ((MainUI) UI.getCurrent()).setDiagnosis(diagnosis);
@@ -364,6 +372,30 @@ public class FilterExtremes {
             return d.getDiagnosisCode();
         }catch(IndexOutOfBoundsException o){
             return "";
+        }
+    }
+
+    private String addPriorityCode(int patientSerNum){
+        TypedQuery<Priority> diag = entityManager.createNamedQuery("Priority.findByPatient", Priority.class);
+        diag.setParameter("patientSerNum", patientSerNum);
+
+        try{
+            Priority d = diag.getResultList().get(0);
+            return d.getPriorityCode();
+        }catch(IndexOutOfBoundsException o){
+            return "";
+        }
+    }
+
+    private Integer addOncologistSerial(int patientSerNum){
+        TypedQuery<PatientDoctor> diag = entityManager.createNamedQuery("PatientDoctor.findBySerialAndOncologist", PatientDoctor.class);
+        diag.setParameter("patientSerNum", patientSerNum);
+
+        try{
+            PatientDoctor d = diag.getResultList().get(0);
+            return d.getDoctorSerNum();
+        }catch(IndexOutOfBoundsException o){
+            return 0;
         }
     }
 

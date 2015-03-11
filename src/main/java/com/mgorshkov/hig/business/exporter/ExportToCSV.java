@@ -23,7 +23,7 @@ import java.util.Set;
 public class ExportToCSV {
     final private static String CSV_SEPERATOR = ",";
     final private static String PATH = "results.csv";
-    final private static String[] headers = {"Patient Serial Number", "Diagnosis Code", "Waiting Time 1", "Waiting Time 2", "Waiting Time 3", "Waiting Time 4", "Waiting Time 5", "Waiting Time 6", "Waiting Time 7"};
+    final private static String[] headers = {"Patient Serial Number", "Diagnosis Code", "Priority Code", "Oncologist Serial Num", "Waiting Time 1", "Waiting Time 2", "Waiting Time 3", "Waiting Time 4", "Waiting Time 5", "Waiting Time 6", "Waiting Time 7"};
 
     @PersistenceContext(unitName = "hig20150218")
     EntityManager entityManager;
@@ -57,6 +57,10 @@ public class ExportToCSV {
                 line.append(p.getPatientSerNum());
                 line.append(CSV_SEPERATOR);
                 line.append(p.getDiagnosis());
+                line.append(CSV_SEPERATOR);
+                line.append(p.getPriorityCode());
+                line.append(CSV_SEPERATOR);
+                line.append(p.getOncologist());
                 line.append(CSV_SEPERATOR);
                 line.append(p.calculateFirstWait(t));
                 line.append(CSV_SEPERATOR);
