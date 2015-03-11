@@ -115,13 +115,13 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
 
         Patient p = isInPatientData(patientSer);
 
-        conf.addSeries(new ListSeries(labels[6], p.calculateSeventhWait()));
-        conf.addSeries(new ListSeries(labels[5], p.calculateSixthWait()));
-        conf.addSeries(new ListSeries(labels[4], p.calculateFifthWait()));
-        conf.addSeries(new ListSeries(labels[3], p.calculateFourthWait()));
-        conf.addSeries(new ListSeries(labels[2], p.calculateThirdWait()));
-        conf.addSeries(new ListSeries(labels[1], p.calculateSecondWait()));
-        conf.addSeries(new ListSeries(labels[0], p.calculateFirstWait()));
+        conf.addSeries(new ListSeries(labels[6], p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[5], p.calculateSixthWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[4], p.calculateFifthWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[3], p.calculateFourthWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[2], p.calculateThirdWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[1], p.calculateSecondWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[0], p.calculateFirstWait(((MainUI) getUI()).getTimeUnit())));
 
         chart.drawChart(conf);
 

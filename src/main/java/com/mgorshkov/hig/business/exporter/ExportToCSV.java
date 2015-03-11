@@ -3,6 +3,7 @@ package com.mgorshkov.hig.business.exporter;
 import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.entities.Diagnosis;
 import com.mgorshkov.hig.model.Patient;
+import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
@@ -22,14 +23,16 @@ import java.util.Set;
 public class ExportToCSV {
     final private static String CSV_SEPERATOR = ",";
     final private static String PATH = "results.csv";
+    final private static String[] headers = {"Patient Serial Number", "Diagnosis Code", "Waiting Time 1", "Waiting Time 2", "Waiting Time 3", "Waiting Time 4", "Waiting Time 5", "Waiting Time 6", "Waiting Time 7"};
 
     @PersistenceContext(unitName = "hig20150218")
     EntityManager entityManager;
-
+    OncoTimeUnit t;
     Set<Patient> workingSet = new HashSet<>();
 
-    public ExportToCSV(Set<Patient> workingSet){
+    public ExportToCSV(Set<Patient> workingSet, OncoTimeUnit t){
         this.workingSet = workingSet;
+        this.t = t;
         setEntityManager();
         write();
     }
@@ -38,26 +41,36 @@ public class ExportToCSV {
         try{
             BufferedWriter write = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH), "UTF-8"));
 
+            StringBuffer line = new StringBuffer();
+
+            for(String h : headers){
+                line.append(h);
+                line.append(CSV_SEPERATOR);
+            }
+
+            write.write(line.toString());
+            write.newLine();
+
             for(Patient p : workingSet){
-                StringBuffer line = new StringBuffer();
+                line = new StringBuffer();
 
                 line.append(p.getPatientSerNum());
                 line.append(CSV_SEPERATOR);
-                line.append(addDiagnosisCode(p.getPatientSerNum()));
+                line.append(p.getDiagnosis());
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateFirstWait());
+                line.append(p.calculateFirstWait(t));
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateSecondWait());
+                line.append(p.calculateSecondWait(t));
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateThirdWait());
+                line.append(p.calculateThirdWait(t));
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateFourthWait());
+                line.append(p.calculateFourthWait(t));
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateFifthWait());
+                line.append(p.calculateFifthWait(t));
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateSixthWait());
+                line.append(p.calculateSixthWait(t));
                 line.append(CSV_SEPERATOR);
-                line.append(p.calculateSeventhWait());
+                line.append(p.calculateSeventhWait(t));
                 line.append(CSV_SEPERATOR);
 
                 write.write(line.toString());
@@ -79,15 +92,5 @@ public class ExportToCSV {
         entityManager = ((MainUI) UI.getCurrent()).getEntityManager();
     }
 
-    private String addDiagnosisCode(int patientSerNum){
-        TypedQuery<Diagnosis> diag = entityManager.createNamedQuery("Diagnosis.findBySer", Diagnosis.class);
-        diag.setParameter("patientSerNum", patientSerNum);
 
-        try{
-            Diagnosis d = diag.getResultList().get(0);
-            return d.getDiagnosisCode();
-        }catch(IndexOutOfBoundsException o){
-            return "";
-        }
-    }
 }

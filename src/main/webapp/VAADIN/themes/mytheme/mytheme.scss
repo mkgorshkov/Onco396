@@ -1,3 +1,5 @@
+$v-app-loading-text: "Loading Onco Data...";
+$v-app-background-color: white;
 // Global variable overrides. Must be declared before importing Valo.
 
 // Defines the plaintext font size, weight and family. Font size affects general component sizing.
@@ -12,7 +14,6 @@
 // Affects the color of some component elements, e.g Button, Panel title, etc
 //$v-background-color: hsl(210, 0%, 98%);
 // Affects the color of content areas, e.g  Panel and Window content, TextField input etc
-//$v-app-background-color: $v-background-color;
 
 // Affects the visual appearance of all components
 //$v-gradient: v-linear 8%;

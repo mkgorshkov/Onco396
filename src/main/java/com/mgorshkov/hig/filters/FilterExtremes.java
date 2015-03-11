@@ -1,7 +1,14 @@
 package com.mgorshkov.hig.filters;
 
+import com.mgorshkov.hig.MainUI;
+import com.mgorshkov.hig.entities.Diagnosis;
 import com.mgorshkov.hig.model.Patient;
+import com.mgorshkov.hig.model.enums.OncoTimeUnit;
+import com.vaadin.ui.UI;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -15,8 +22,13 @@ public class FilterExtremes {
     boolean setDebug = true; //Apologies to the JAVA gods for flag programming.
     boolean removeZeros = true;
 
+    @PersistenceContext(unitName = "hig20150218")
+    EntityManager entityManager;
+
     public FilterExtremes(Set<Patient> workingSet){
         this.workingSet = workingSet;
+
+            setEntityManager();
 
             calculateFirstWaiting();
             calculateSecondWaiting();
@@ -25,6 +37,8 @@ public class FilterExtremes {
             calculateFifthWaiting();
             calculateSixthWaiting();
             calculateSeventhWaiting();
+
+            addDiagnosis();
     }
 
     private void calculateFirstWaiting(){
@@ -37,7 +51,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateFirstWait();
+            double waitingTime = p.calculateFirstWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -46,7 +60,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateFirstWait();
+            double waitingTime = p.calculateFirstWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -61,7 +75,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFirstWait() > totalForAverage + standardDeviation || p.calculateFirstWait() == 0){
+            if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateFirstWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -80,7 +94,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateSecondWait();
+            double waitingTime = p.calculateSecondWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -89,7 +103,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateSecondWait();
+            double waitingTime = p.calculateSecondWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -104,7 +118,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSecondWait() > totalForAverage + standardDeviation || p.calculateSecondWait() == 0){
+            if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateSecondWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -123,7 +137,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateThirdWait();
+            double waitingTime = p.calculateThirdWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -132,7 +146,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateThirdWait();
+            double waitingTime = p.calculateThirdWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -147,7 +161,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateThirdWait() > totalForAverage + standardDeviation || p.calculateThirdWait() == 0){
+            if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateThirdWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -166,7 +180,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateFourthWait();
+            double waitingTime = p.calculateFourthWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -175,7 +189,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateFourthWait();
+            double waitingTime = p.calculateFourthWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -190,7 +204,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFourthWait() > totalForAverage + standardDeviation || p.calculateFourthWait() == 0){
+            if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateFourthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -209,7 +223,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateFifthWait();
+            double waitingTime = p.calculateFifthWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -218,7 +232,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateFifthWait();
+            double waitingTime = p.calculateFifthWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -233,7 +247,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFifthWait() > totalForAverage + standardDeviation || p.calculateFifthWait() == 0){
+            if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateFifthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -252,7 +266,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateSixthWait();
+            double waitingTime = p.calculateSixthWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -261,7 +275,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateSixthWait();
+            double waitingTime = p.calculateSixthWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -276,7 +290,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSixthWait() > totalForAverage + standardDeviation || p.calculateSixthWait() == 0){
+            if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateSixthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -295,7 +309,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateSeventhWait();
+            double waitingTime = p.calculateSeventhWait(OncoTimeUnit.MINUTES);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -304,7 +318,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            long waitingTime = p.calculateSeventhWait();
+            double waitingTime = p.calculateSeventhWait(OncoTimeUnit.MINUTES);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -319,13 +333,35 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSeventhWait() > totalForAverage + standardDeviation || p.calculateSeventhWait() == 0){
+            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateSeventhWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
 
         if(setDebug) System.out.println(workingSet.size());
         if(setDebug) System.out.println((System.currentTimeMillis() - start) +" ms");
+    }
+
+    private void addDiagnosis(){
+        for(Patient w : workingSet){
+            w.setDiagnosis(addDiagnosisCode(w.getPatientSerNum()));
+        }
+    }
+
+    private String addDiagnosisCode(int patientSerNum){
+        TypedQuery<Diagnosis> diag = entityManager.createNamedQuery("Diagnosis.findBySer", Diagnosis.class);
+        diag.setParameter("patientSerNum", patientSerNum);
+
+        try{
+            Diagnosis d = diag.getResultList().get(0);
+            return d.getDiagnosisCode();
+        }catch(IndexOutOfBoundsException o){
+            return "";
+        }
+    }
+
+    private void setEntityManager(){
+        entityManager = ((MainUI) UI.getCurrent()).getEntityManager();
     }
 
     public Set<Patient> getWorkingSet() {

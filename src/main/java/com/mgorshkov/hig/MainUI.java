@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.business.SessionBean;
+import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.mgorshkov.hig.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
@@ -37,10 +38,12 @@ public class MainUI extends UI {
     Navigator navigator;
     final VerticalLayout layout = new VerticalLayout();
     private Set<Patient> patientData;
+    private OncoTimeUnit globalTimeUnit;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         patientData = new HashSet<>();
+        globalTimeUnit = OncoTimeUnit.MINUTES;
 
         layout.setMargin(true);
         setContent(layout);
@@ -81,6 +84,14 @@ public class MainUI extends UI {
             }
         }
         return null;
+    }
+
+    public OncoTimeUnit getTimeUnit(){
+        return globalTimeUnit;
+    }
+
+    public void setTimeUnit(OncoTimeUnit newUnit){
+        globalTimeUnit = newUnit;
     }
 
     public void setPatientData(Set<Patient> patientData) {

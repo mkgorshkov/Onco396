@@ -6,13 +6,12 @@ import com.mgorshkov.hig.filters.AddAllData;
 import com.mgorshkov.hig.filters.FilterByStage;
 import com.mgorshkov.hig.filters.FilterExtremes;
 import com.mgorshkov.hig.model.Patient;
+import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.StreamResource;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 
 import javax.persistence.EntityManager;
@@ -39,8 +38,17 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     Button patients = new Button("Charts by Patient", FontAwesome.USER);
     Button chartsTimeline = new Button("Chart by Stage - Selection", FontAwesome.FILE_TEXT);
     Button exportExcel = new Button("Export as CSV", FontAwesome.FILE_EXCEL_O);
+    Button globalOptionsButton = new Button(FontAwesome.GEARS);
+    Button save = new Button(FontAwesome.SAVE);
+    Button cancel = new Button(FontAwesome.TIMES);
+
 
     HorizontalLayout buttons = new HorizontalLayout();
+
+    VerticalLayout globalLayout = new VerticalLayout();
+    Window options = new Window("Global Options", globalLayout);
+
+    ComboBox timeUnit = new ComboBox("Time Unit");
 
     public void init(){
         setSizeFull();
@@ -51,17 +59,28 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         patients.addClickListener(this);
         chartsTimeline.addClickListener(this);
         exportExcel.addClickListener(this);
+        globalOptionsButton.addClickListener(this);
+        save.addClickListener(this);
+        cancel.addClickListener(this);
 
         buttons.addComponent(charts);
         buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
         buttons.addComponent(exportExcel);
+        buttons.addComponent(globalOptionsButton);
 
         buttons.setSpacing(true);
 
+        Resource res = new ThemeResource("img/logo1.png");
+        Image image = new Image(null, res);
+        addComponent(image);
+
         addComponent(buttons);
 
-        setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
+        setComponentAlignment(buttons, Alignment.TOP_CENTER);
+        setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+
+        setWindow();
 
         initialData = new AddAllData();
         workingSet = initialData.getWorkingSet();
@@ -74,6 +93,21 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
 
         ((MainUI) getUI()).setPatientData(workingSet);
 
+    }
+
+    private void setWindow(){
+        options.center();
+
+        timeUnit.addItems(OncoTimeUnit.values());
+        timeUnit.setNullSelectionAllowed(false);
+        timeUnit.setValue(((MainUI) getUI()).getTimeUnit());
+
+        globalLayout.setMargin(true);
+        globalLayout.setSpacing(true);
+        globalLayout.addComponent(timeUnit);
+        globalLayout.addComponent(new HorizontalLayout(save, cancel));
+//        globalLayout.addComponent(save);
+//        globalLayout.addComponent(cancel);
     }
 
     @Override
@@ -91,7 +125,15 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         }else if(clickEvent.getSource().equals(patients)){
             getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(exportExcel)){
-            ExportToCSV e = new ExportToCSV(((MainUI) getUI()).getPatientData());
+            ExportToCSV e = new ExportToCSV(((MainUI) getUI()).getPatientData(), (((MainUI) getUI()).getTimeUnit()));
+        }else if(clickEvent.getSource().equals(globalOptionsButton)){
+            UI.getCurrent().addWindow(options);
+        }else if(clickEvent.getSource().equals(save)){
+            ((MainUI) getUI()).setTimeUnit((OncoTimeUnit) timeUnit.getValue());
+            options.close();
+            Notification.show("Time Unit Updated", Notification.Type.TRAY_NOTIFICATION);
+        }else if(clickEvent.getSource().equals(cancel)){
+            options.close();
         }
     }
 }

@@ -122,44 +122,44 @@ public class ChartsTimelineView extends VerticalLayout implements View,Button.Cl
         conf.addxAxis(x);
 
         YAxis y = new YAxis();
-        y.setTitle("Waiting Time (Minutes)");
+        y.setTitle("Waiting Time "+(((MainUI) getUI()).getTimeUnit()));
         conf.addyAxis(y);
 
         ArrayList<Number> values = new ArrayList<>();
 
         if (stage == 0) {
             for(Patient p : workingSet){
-                values.add(p.calculateFirstWait());
+                values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 1){
             for(Patient p : workingSet){
-                values.add(p.calculateSecondWait());
+                values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 2){
             for(Patient p : workingSet){
-                values.add(p.calculateThirdWait());
+                values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 3){
             for(Patient p : workingSet){
-                values.add(p.calculateFourthWait());
+                values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 4){
             for(Patient p : workingSet){
-                values.add(p.calculateFifthWait());
+                values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 5){
             for(Patient p : workingSet){
-                values.add(p.calculateSixthWait());
+                values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 6){
             for(Patient p : workingSet){
-                values.add(p.calculateSeventhWait());
+                values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }
@@ -208,37 +208,37 @@ public class ChartsTimelineView extends VerticalLayout implements View,Button.Cl
 
         if (stage == 0) {
             for(Patient p : input){
-                values.add(p.calculateFirstWait());
+                values.add(p.calculateFirstWait((((MainUI) getUI()).getTimeUnit())));
 
             }
         }else if(stage == 1){
             for(Patient p : input){
-                values.add(p.calculateSecondWait());
+                values.add(p.calculateSecondWait((((MainUI) getUI()).getTimeUnit())));
 
             }
         }else if(stage == 2){
             for(Patient p : input){
-                values.add(p.calculateThirdWait());
+                values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 3){
             for(Patient p : input){
-                values.add(p.calculateFourthWait());
+                values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 4){
             for(Patient p : input){
-                values.add(p.calculateFifthWait());
+                values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 5){
             for(Patient p : input){
-                values.add(p.calculateSixthWait());
+                values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }else if(stage == 6){
             for(Patient p : input){
-                values.add(p.calculateSeventhWait());
+                values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
 
             }
         }

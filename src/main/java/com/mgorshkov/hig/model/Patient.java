@@ -1,5 +1,6 @@
 package com.mgorshkov.hig.model;
 
+import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.mgorshkov.hig.model.enums.Stage;
 
 import java.util.HashSet;
@@ -12,10 +13,12 @@ import java.util.concurrent.TimeUnit;
 public class Patient {
     private int PatientSerNum;
     private HashSet<DataPoint> DataPoints;
+    private String diagnosis;
 
     public Patient(int patient){
         PatientSerNum = patient;
         DataPoints = new HashSet<>();
+        diagnosis = "";
     }
 
     public void addDataPoint(DataPoint d){
@@ -42,7 +45,7 @@ public class Patient {
         DataPoints = dataPoints;
     }
 
-    public long calculateFirstWait(){
+    public double calculateFirstWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -64,10 +67,18 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+           return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
     }
 
-    public long calculateSecondWait(){
+    public double calculateSecondWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -89,10 +100,18 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+            return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
     }
 
-    public long calculateThirdWait(){
+    public double calculateThirdWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -114,10 +133,18 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+            return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
     }
 
-    public long calculateFourthWait(){
+    public double calculateFourthWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -139,10 +166,18 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+            return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
     }
 
-    public long calculateFifthWait(){
+    public double calculateFifthWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -164,10 +199,18 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+            return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
     }
 
-    public long calculateSixthWait(){
+    public double calculateSixthWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -189,10 +232,18 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+            return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
     }
 
-    public long calculateSeventhWait(){
+    public double calculateSeventhWait(OncoTimeUnit t){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -214,6 +265,22 @@ public class Patient {
             return 0;
         }
 
-        return TimeUnit.MILLISECONDS.toMinutes(duration);
+        double minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        if(t == OncoTimeUnit.HOURS){
+            return minutes / 60;
+        }else if(t == OncoTimeUnit.DAYS){
+            return minutes / 1440;
+        }
+
+        return minutes;
+    }
+
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
     }
 }
