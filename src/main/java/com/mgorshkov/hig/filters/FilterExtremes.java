@@ -78,7 +78,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateFirstWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateFirstWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -121,7 +121,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateSecondWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateSecondWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -164,7 +164,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateThirdWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateThirdWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -207,7 +207,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateFourthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateFourthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -250,7 +250,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateFifthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateFifthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -293,7 +293,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateSixthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateSixthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
@@ -336,7 +336,7 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + standardDeviation || p.calculateSeventhWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateSeventhWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
             }
         }
