@@ -6,9 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.mgorshkov.hig.model.Patient;
-import com.mgorshkov.hig.business.SessionBean;
+import com.mgorshkov.hig.business.services.SessionBean;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
-import com.mgorshkov.hig.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
@@ -40,6 +39,7 @@ public class MainUI extends UI {
     private Set<Patient> patientData;
     private OncoTimeUnit globalTimeUnit;
     private Set<String> diagnosis;
+    private String crtUser;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -55,24 +55,12 @@ public class MainUI extends UI {
 
     private void setNavigation() {
         navigator = new Navigator(this, this);
-        navigator.addView(MainView.VIEW_NAME, MainView.class);
-//        navigator.addView(TableView.VIEW_NAME, TableView.class);
-//        navigator.addView(TimeTrialView.VIEW_NAME, TimeTrialView.class);
-//        navigator.addView(PatientSummaryView.VIEW_NAME, PatientSummaryView.class);
-        navigator.addView(ChartsView.VIEW_NAME, ChartsView.class);
-        navigator.addView(PatientView.VIEW_NAME, PatientView.class);
-        navigator.addView(ChartsTimelineView.VIEW_NAME, ChartsTimelineView.class);
-        navigator.addView(ChartsDiagnosisView.VIEW_NAME, ChartsDiagnosisView.class);
         navigator.addProvider(viewProvider);
         setNavigator(navigator);
     }
 
     public EntityManager getEntityManager(){
         return entityManager;
-    }
-
-    public SessionBean getSessionBean(){
-        return bean;
     }
 
     public Set<Patient> getPatientData() {
@@ -106,5 +94,13 @@ public class MainUI extends UI {
 
     public void setDiagnosis(HashSet<String> diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public String getCrtUser() {
+        return crtUser;
+    }
+
+    public void setCrtUser(String crtUser) {
+        this.crtUser = crtUser;
     }
 }

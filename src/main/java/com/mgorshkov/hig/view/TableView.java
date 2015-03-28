@@ -2,7 +2,7 @@ package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.model.Patient;
-import com.mgorshkov.hig.entities.Alias;
+import com.mgorshkov.hig.business.entities.Alias;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;

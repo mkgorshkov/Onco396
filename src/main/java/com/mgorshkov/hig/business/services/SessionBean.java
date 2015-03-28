@@ -1,4 +1,4 @@
-package com.mgorshkov.hig.business;
+package com.mgorshkov.hig.business.services;
 
 /**
  * Created by mkgo on 23/02/15.

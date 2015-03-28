@@ -5,14 +5,14 @@
     <persistence-unit name="hig20150218">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:jboss/datasources/hig20150218</jta-data-source>
-        <class>com.mgorshkov.hig.entities.Diagnosis</class>
-        <class>com.mgorshkov.hig.entities.Alias</class>
-        <class>com.mgorshkov.hig.entities.AliasExpression</class>
-        <class>com.mgorshkov.hig.entities.Appointment</class>
-        <class>com.mgorshkov.hig.entities.Document</class>
-        <class>com.mgorshkov.hig.entities.Task</class>
-        <class>com.mgorshkov.hig.entities.Priority</class>
-        <class>com.mgorshkov.hig.entities.PatientDoctor</class>
+        <class>com.mgorshkov.hig.business.entities.Diagnosis</class>
+        <class>com.mgorshkov.hig.business.entities.Alias</class>
+        <class>com.mgorshkov.hig.business.entities.AliasExpression</class>
+        <class>com.mgorshkov.hig.business.entities.Appointment</class>
+        <class>com.mgorshkov.hig.business.entities.Document</class>
+        <class>com.mgorshkov.hig.business.entities.Task</class>
+        <class>com.mgorshkov.hig.business.entities.Priority</class>
+        <class>com.mgorshkov.hig.business.entities.PatientDoctor</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update" />

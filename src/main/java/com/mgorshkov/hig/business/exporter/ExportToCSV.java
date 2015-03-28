@@ -1,18 +1,14 @@
 package com.mgorshkov.hig.business.exporter;
 
 import com.mgorshkov.hig.MainUI;
-import com.mgorshkov.hig.entities.Diagnosis;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
-import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
-import com.vaadin.server.StreamResource;
 import com.vaadin.ui.UI;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.io.*;
 import java.util.HashSet;
 import java.util.Set;

@@ -1,9 +1,9 @@
 package com.mgorshkov.hig.filters;
 
 import com.mgorshkov.hig.MainUI;
-import com.mgorshkov.hig.entities.Appointment;
-import com.mgorshkov.hig.entities.Document;
-import com.mgorshkov.hig.entities.Task;
+import com.mgorshkov.hig.business.entities.Appointment;
+import com.mgorshkov.hig.business.entities.Document;
+import com.mgorshkov.hig.business.entities.Task;
 import com.mgorshkov.hig.model.DataPoint;
 import com.mgorshkov.hig.model.enums.DataPointType;
 import com.mgorshkov.hig.model.Patient;

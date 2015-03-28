@@ -1,4 +1,4 @@
-package com.mgorshkov.hig.entities;
+package com.mgorshkov.hig.business.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -8,35 +8,33 @@ import java.math.BigInteger;
 import java.util.Date;
 
 /**
- * Created by mkgo on 23/02/15.
+ * Created by mkgo on 22/02/15.
  */
 @Entity
 @Table(catalog = "hig20150218", schema = "")
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
-        @NamedQuery(name = "Task.findByAliasAndStatus", query = "SELECT t FROM Task t where t.AliasSerNum=:aSerNum and t.Status not like :aStatus and t.Status not like :aStatus2")
+        @NamedQuery(name = "Appointment.findAll", query = "SELECT a FROM Appointment a"),
+        @NamedQuery(name = "Appointment.findByAlias", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum"),
+        @NamedQuery(name = "Appointment.findByAliasAndStatus", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum and a.Status not like :aStatus and a.Status not like :aStatus2")
 })
-public class Task implements Serializable {
+public class Appointment implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
-    private Integer TaskSerNum;
+    private Integer AppointmentSerNum;
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer PatientSerNum;
     @Basic(optional = true)
     @Column(nullable = true)
-    private Integer TaskId;
+    private Integer AppointmentId;
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer DiagnosisSerNum;
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private Integer PrioritySerNum;
     @Basic(optional = false)
     @Column(nullable = false)
     @Size(max = 100)
@@ -44,31 +42,27 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer AliasExpressionSerNum;
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @Basic(optional = true)
+    @Column(nullable = true)
     @Size(max = 50)
     private String Status;
-    @Basic(optional = true)
     @Column(nullable = true)
-    private Date DueDateTime;
     @Basic(optional = true)
+    private Date ScheduledStartTime;
     @Column(nullable = true)
-    private Date CreationDate;
     @Basic(optional = true)
-    @Column(nullable = true)
-    private Date CompletionDate;
-    @Basic(optional = false)
+    private Date ScheduledEndTime;
     @Column(nullable = false)
     private Date LastUpdated;
 
-    public Task() {}
+    public Appointment(){}
 
-    public Integer getTaskSerNum() {
-        return TaskSerNum;
+    public Integer getAppointmentSerNum() {
+        return AppointmentSerNum;
     }
 
-    public void setTaskSerNum(Integer taskSerNum) {
-        TaskSerNum = taskSerNum;
+    public void setAppointmentSerNum(Integer appointmentSerNum) {
+        AppointmentSerNum = appointmentSerNum;
     }
 
     public Integer getPatientSerNum() {
@@ -79,12 +73,12 @@ public class Task implements Serializable {
         PatientSerNum = patientSerNum;
     }
 
-    public Integer getTaskId() {
-        return TaskId;
+    public Integer getAppointmentId() {
+        return AppointmentId;
     }
 
-    public void setTaskId(Integer taskId) {
-        TaskId = taskId;
+    public void setAppointmentId(Integer appointmentId) {
+        AppointmentId = appointmentId;
     }
 
     public Integer getDiagnosisSerNum() {
@@ -93,14 +87,6 @@ public class Task implements Serializable {
 
     public void setDiagnosisSerNum(Integer diagnosisSerNum) {
         DiagnosisSerNum = diagnosisSerNum;
-    }
-
-    public Integer getPrioritySerNum() {
-        return PrioritySerNum;
-    }
-
-    public void setPrioritySerNum(Integer prioritySerNum) {
-        PrioritySerNum = prioritySerNum;
     }
 
     public BigInteger getAliasSerNum() {
@@ -127,28 +113,20 @@ public class Task implements Serializable {
         Status = status;
     }
 
-    public Date getDueDateTime() {
-        return DueDateTime;
+    public Date getScheduledStartTime() {
+        return ScheduledStartTime;
     }
 
-    public void setDueDateTime(Date dueDateTime) {
-        DueDateTime = dueDateTime;
+    public void setScheduledStartTime(Date scheduledStartTime) {
+        ScheduledStartTime = scheduledStartTime;
     }
 
-    public Date getCreationDate() {
-        return CreationDate;
+    public Date getScheduledEndTime() {
+        return ScheduledEndTime;
     }
 
-    public void setCreationDate(Date creationDate) {
-        CreationDate = creationDate;
-    }
-
-    public Date getCompletionDate() {
-        return CompletionDate;
-    }
-
-    public void setCompletionDate(Date completionDate) {
-        CompletionDate = completionDate;
+    public void setScheduledEndTime(Date scheduledEndTime) {
+        ScheduledEndTime = scheduledEndTime;
     }
 
     public Date getLastUpdated() {

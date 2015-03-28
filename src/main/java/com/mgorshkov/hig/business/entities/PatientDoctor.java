@@ -1,4 +1,4 @@
-package com.mgorshkov.hig.entities;
+package com.mgorshkov.hig.business.entities;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;

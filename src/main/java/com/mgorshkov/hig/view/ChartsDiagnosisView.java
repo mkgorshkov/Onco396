@@ -1,22 +1,20 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
+import com.mgorshkov.hig.filters.FilterByStageCodes;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.addon.charts.Chart;
+import com.vaadin.addon.charts.PointClickEvent;
+import com.vaadin.addon.charts.PointClickListener;
 import com.vaadin.addon.charts.model.*;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Maxim Gorshkov <maxim.gorshkov<at>savoirfairelinux.com>
@@ -27,10 +25,11 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
     public final static String VIEW_NAME = "ChartsDiagnosisView";
     Set<Patient> workingSet = new HashSet<>();
 
-    Label title = new Label(VIEW_NAME);
+    final static String[] CHOICES = {"Stage 1: CT Scan - Initial Contour", "Stage 2: Initial Contour - MD Contour", "Stage 3: MD Contour - CT Planning Sheet", "Stage 4: CT Planning Sheet - Dose Calculation", "Stage 5: Dose Calculation - MD Approve", "Stage 6: MD Approve - Physics QA", "Stage 7: Physics QA - Ready for Treatement"};
+    final static Label CHOOSE_SOMETHING = new Label("Make selection above to see graphs.");
+    List<String> diagnosisChoices;
 
-    final static String[] choices = {"Stage 1: CT Scan - Initial Contour", "Stage 2: Initial Contour - MD Contour", "Stage 3: MD Contour - CT Planning Sheet", "Stage 4: CT Planning Sheet - Dose Calculation", "Stage 5: Dose Calculation - MD Approve", "Stage 6: MD Approve - Physics QA", "Stage 7: Physics QA - Ready for Treatement"};
-    Set<String> diagnosisChoices;
+    FilterByStageCodes filterStageCodes;
 
     ComboBox selector = new ComboBox("Stage Select: ");
     ComboBox diagnosis = new ComboBox("Diagnosis: ");
@@ -38,27 +37,24 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
     public void init(Set<Patient> workingSet){
         this.workingSet = workingSet;
-        diagnosisChoices = ((MainUI) getUI()).getDiagnosis();
+        filterStageCodes = new FilterByStageCodes(workingSet);
+        diagnosisChoices = filterStageCodes.sortedkeys();
 
         setSizeFull();
         setSpacing(true);
         setMargin(true);
 
-        setTitle();
         setCombo();
-        setCharts(0, workingSet);
-    }
-
-    private void setTitle(){
-        title.addStyleName(ValoTheme.LABEL_H2);
-        addComponent(title);
-        setExpandRatio(title, 0.1f);
+        addComponent(CHOOSE_SOMETHING);
+        CHOOSE_SOMETHING.setWidthUndefined();
+        setExpandRatio(CHOOSE_SOMETHING, 0.9f);
+        setComponentAlignment(CHOOSE_SOMETHING, Alignment.MIDDLE_CENTER);
     }
 
     private void setCombo(){
-        selector.addItems(choices);
+        selector.addItems(CHOICES);
         selector.setNullSelectionAllowed(false);
-        selector.setValue(choices[0]);
+        selector.setValue(CHOICES[0]);
         selector.setWidth("100%");
         selector.addValueChangeListener(this);
 
@@ -75,64 +71,99 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         setExpandRatio(h, 0.1f);
     }
 
-    private void setCharts(int stage, Set<Patient> input){
+    private void setCharts(final int stage, final HashMap<String, List<Patient>> input){
         chart = new Chart(ChartType.COLUMN);
 
         Configuration conf = chart.getConfiguration();
-        conf.setTitle(choices[stage]);
-
+        conf.setTitle(CHOICES[stage]);
 
         XAxis x = new XAxis();
-        x.setCategories(patientSerNums(stage, input));
-        x.setTitle("Patient Serial Number");
+
+        String[] outList = new String[input.keySet().size()];
+        int i = 0;
+        for(String s : input.keySet()){
+            outList[i] = s;
+            i++;
+        }
+
+        x.setCategories(outList);
+        x.setTitle("Diagosis Subcategory");
         conf.addxAxis(x);
 
         YAxis y = new YAxis();
-        y.setTitle("Waiting Time "+(((MainUI) getUI()).getTimeUnit().toString()));
+        y.setTitle("Number of Patients");
         conf.addyAxis(y);
 
         ArrayList<Number> values = new ArrayList<>();
 
         if (stage == 0) {
-            for(Patient p : input){
-                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }else if(stage == 1){
-            for(Patient p : input){
-                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }else if(stage == 2){
-            for(Patient p : input){
-                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }else if(stage == 3){
-            for(Patient p : input){
-                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }else if(stage == 4){
-            for(Patient p : input){
-                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }else if(stage == 5){
-            for(Patient p : input){
-                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }else if(stage == 6){
-            for(Patient p : input){
-                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
-
+            for(String diagnosis : input.keySet()){
+                values.add(input.get(diagnosis).size());
             }
         }
 
+//        if (stage == 0) {
+//            for(Patient p : input.get(diagnosis.getValue()).size()){
+//                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
+//            }
+//        }else if(stage == 1){
+//            for(Patient p : input.get(diagnosis.getValue())){
+//                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
+//
+//            }
+//        }else if(stage == 2){
+//            for(Patient p : input.get(diagnosis.getValue())){
+//                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
+//
+//            }
+//        }else if(stage == 3){
+//            for(Patient p : input.get(diagnosis.getValue())){
+//                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
+//
+//            }
+//        }else if(stage == 4){
+//            for(Patient p : input.get(diagnosis.getValue())){
+//                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
+//
+//            }
+//        }else if(stage == 5){
+//            for(Patient p : input.get(diagnosis.getValue())){
+//                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
+//
+//            }
+//        }else if(stage == 6){
+//            for(Patient p : input.get(diagnosis.getValue())){
+//                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
+//            }
+//        }
+
         Number[] valuesToAdd = new Number[values.size()];
-        for(int i = 0; i<valuesToAdd.length; i++){
-            valuesToAdd[i] = values.get(i);
+        for(int j = 0; j<valuesToAdd.length; j++){
+            valuesToAdd[j] = values.get(j);
         }
 
         conf.setSeries(new ListSeries("", valuesToAdd));
@@ -143,8 +174,90 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
         setExpandRatio(chart, 0.8f);
 
+        chart.addPointClickListener(new PointClickListener() {
+            @Override
+            public void onClick(PointClickEvent pointClickEvent) {
+                drillDownGraph(stage, pointClickEvent.getCategory(), input.get(pointClickEvent.getCategory()));
+            }
+        });
+
     }
 
+    private void drillDownGraph(int stage, String category, List<Patient> patients){
+        removeComponent(chart);
+        chart = new Chart(ChartType.COLUMN);
+
+        Configuration conf = chart.getConfiguration();
+        conf.setTitle(CHOICES[stage]);
+
+        XAxis x = new XAxis();
+
+        x.setCategories(patientSerNums(stage, new HashSet<Patient>(patients)));
+        x.setTitle("Patient Serial Number");
+        conf.addxAxis(x);
+
+        YAxis y = new YAxis();
+        y.setTitle("Patient Waiting Time ("+((MainUI) getUI()).getTimeUnit().toString()+")");
+        conf.addyAxis(y);
+
+        ArrayList<Number> values = new ArrayList<>();
+
+        if (stage == 0) {
+            for(Patient p : patients){
+                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
+            }
+        }else if(stage == 1){
+            for(Patient p : patients){
+                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
+
+            }
+        }else if(stage == 2){
+            for(Patient p : patients){
+                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
+
+            }
+        }else if(stage == 3){
+            for(Patient p : patients){
+                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
+
+            }
+        }else if(stage == 4){
+            for(Patient p : patients){
+                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
+
+            }
+        }else if(stage == 5){
+            for(Patient p : patients){
+                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
+
+            }
+        }else if(stage == 6){
+            for(Patient p : patients){
+                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
+            }
+        }
+
+        Number[] valuesToAdd = new Number[values.size()];
+        for(int j = 0; j<valuesToAdd.length; j++){
+            valuesToAdd[j] = values.get(j);
+        }
+
+        conf.setSeries(new ListSeries("", valuesToAdd));
+        chart.drawChart(conf);
+
+        chart.setSizeFull();
+        addComponent(chart);
+
+        setExpandRatio(chart, 0.8f);
+
+        chart.addPointClickListener(new PointClickListener() {
+            @Override
+            public void onClick(PointClickEvent pointClickEvent) {
+                ((MainUI) getUI()).setCrtUser(pointClickEvent.getCategory());
+                getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+            }
+        });
+    }
     private String[] patientSerNums(int stage, Set<Patient> input){
         ArrayList<String> sers = new ArrayList<>();
 
@@ -189,21 +302,30 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         return serialToReturn;
     }
 
-    private Set<Patient> filterByDiagnosis(){
-        Set<Patient> newSet = new HashSet<>();
 
-        if(diagnosis.getValue() == null){
-            return workingSet;
-        }
+    private HashMap<String, List<Patient>> filterByDiagnosis(){
+        HashMap<String, List<Patient>> newMap = new HashMap<>();
+
+//        if(diagnosis.getValue() == null){
+//            return workingSet;
+//        }
+
         String diag = diagnosis.getValue().toString();
+        Set<String> subDiagnosis = (HashSet) filterStageCodes.getBrokenSet().get(diag);
 
         for(Patient p : workingSet){
-            if(p.getDiagnosis().equals(diag)){
-                newSet.add(p);
+            if(subDiagnosis.contains(p.getDiagnosis())){
+                if(newMap.containsKey(p.getDiagnosis())){
+                    newMap.get(p.getDiagnosis()).add(p);
+                }else{
+                    ArrayList<Patient> list = new ArrayList<>();
+                    list.add(p);
+                    newMap.put(p.getDiagnosis(), list);
+                }
             }
         }
 
-        return newSet;
+        return newMap;
     }
 
     @Override
@@ -214,21 +336,22 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
     @Override
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-        removeComponent(chart);
+        if(chart == null) removeComponent(CHOOSE_SOMETHING);
+        if(chart != null) removeComponent(chart);
 
-        if(selector.getValue().toString().equals(choices[0])){
+        if(selector.getValue().toString().equals(CHOICES[0])){
             setCharts(0, filterByDiagnosis());
-        }else if(selector.getValue().toString().equals(choices[1])){
+        }else if(selector.getValue().toString().equals(CHOICES[1])){
             setCharts(1,  filterByDiagnosis());
-        }else if(selector.getValue().toString().equals(choices[2])){
+        }else if(selector.getValue().toString().equals(CHOICES[2])){
             setCharts(2,  filterByDiagnosis());
-        }else if(selector.getValue().toString().equals(choices[3])){
+        }else if(selector.getValue().toString().equals(CHOICES[3])){
             setCharts(3,  filterByDiagnosis());
-        }else if(selector.getValue().toString().equals(choices[4])){
+        }else if(selector.getValue().toString().equals(CHOICES[4])){
             setCharts(4,  filterByDiagnosis());
-        }else if(selector.getValue().toString().equals(choices[5])){
+        }else if(selector.getValue().toString().equals(CHOICES[5])){
             setCharts(5,  filterByDiagnosis());
-        }else if(selector.getValue().toString().equals(choices[6])){
+        }else if(selector.getValue().toString().equals(CHOICES[6])){
             setCharts(6,  filterByDiagnosis());
         }
     }

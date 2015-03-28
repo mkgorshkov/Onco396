@@ -1,4 +1,4 @@
-package com.mgorshkov.hig.entities;
+package com.mgorshkov.hig.business.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -8,33 +8,35 @@ import java.math.BigInteger;
 import java.util.Date;
 
 /**
- * Created by mkgo on 22/02/15.
+ * Created by mkgo on 23/02/15.
  */
 @Entity
 @Table(catalog = "hig20150218", schema = "")
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Appointment.findAll", query = "SELECT a FROM Appointment a"),
-        @NamedQuery(name = "Appointment.findByAlias", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum"),
-        @NamedQuery(name = "Appointment.findByAliasAndStatus", query = "SELECT a FROM Appointment a where a.AliasSerNum=:aSerNum and a.Status not like :aStatus and a.Status not like :aStatus2")
+        @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
+        @NamedQuery(name = "Task.findByAliasAndStatus", query = "SELECT t FROM Task t where t.AliasSerNum=:aSerNum and t.Status not like :aStatus and t.Status not like :aStatus2")
 })
-public class Appointment implements Serializable{
+public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
-    private Integer AppointmentSerNum;
+    private Integer TaskSerNum;
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer PatientSerNum;
     @Basic(optional = true)
     @Column(nullable = true)
-    private Integer AppointmentId;
+    private Integer TaskId;
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer DiagnosisSerNum;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private Integer PrioritySerNum;
     @Basic(optional = false)
     @Column(nullable = false)
     @Size(max = 100)
@@ -42,27 +44,31 @@ public class Appointment implements Serializable{
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer AliasExpressionSerNum;
-    @Basic(optional = true)
-    @Column(nullable = true)
+    @Basic(optional = false)
+    @Column(nullable = false)
     @Size(max = 50)
     private String Status;
-    @Column(nullable = true)
     @Basic(optional = true)
-    private Date ScheduledStartTime;
     @Column(nullable = true)
+    private Date DueDateTime;
     @Basic(optional = true)
-    private Date ScheduledEndTime;
+    @Column(nullable = true)
+    private Date CreationDate;
+    @Basic(optional = true)
+    @Column(nullable = true)
+    private Date CompletionDate;
+    @Basic(optional = false)
     @Column(nullable = false)
     private Date LastUpdated;
 
-    public Appointment(){}
+    public Task() {}
 
-    public Integer getAppointmentSerNum() {
-        return AppointmentSerNum;
+    public Integer getTaskSerNum() {
+        return TaskSerNum;
     }
 
-    public void setAppointmentSerNum(Integer appointmentSerNum) {
-        AppointmentSerNum = appointmentSerNum;
+    public void setTaskSerNum(Integer taskSerNum) {
+        TaskSerNum = taskSerNum;
     }
 
     public Integer getPatientSerNum() {
@@ -73,12 +79,12 @@ public class Appointment implements Serializable{
         PatientSerNum = patientSerNum;
     }
 
-    public Integer getAppointmentId() {
-        return AppointmentId;
+    public Integer getTaskId() {
+        return TaskId;
     }
 
-    public void setAppointmentId(Integer appointmentId) {
-        AppointmentId = appointmentId;
+    public void setTaskId(Integer taskId) {
+        TaskId = taskId;
     }
 
     public Integer getDiagnosisSerNum() {
@@ -87,6 +93,14 @@ public class Appointment implements Serializable{
 
     public void setDiagnosisSerNum(Integer diagnosisSerNum) {
         DiagnosisSerNum = diagnosisSerNum;
+    }
+
+    public Integer getPrioritySerNum() {
+        return PrioritySerNum;
+    }
+
+    public void setPrioritySerNum(Integer prioritySerNum) {
+        PrioritySerNum = prioritySerNum;
     }
 
     public BigInteger getAliasSerNum() {
@@ -113,20 +127,28 @@ public class Appointment implements Serializable{
         Status = status;
     }
 
-    public Date getScheduledStartTime() {
-        return ScheduledStartTime;
+    public Date getDueDateTime() {
+        return DueDateTime;
     }
 
-    public void setScheduledStartTime(Date scheduledStartTime) {
-        ScheduledStartTime = scheduledStartTime;
+    public void setDueDateTime(Date dueDateTime) {
+        DueDateTime = dueDateTime;
     }
 
-    public Date getScheduledEndTime() {
-        return ScheduledEndTime;
+    public Date getCreationDate() {
+        return CreationDate;
     }
 
-    public void setScheduledEndTime(Date scheduledEndTime) {
-        ScheduledEndTime = scheduledEndTime;
+    public void setCreationDate(Date creationDate) {
+        CreationDate = creationDate;
+    }
+
+    public Date getCompletionDate() {
+        return CompletionDate;
+    }
+
+    public void setCompletionDate(Date completionDate) {
+        CompletionDate = completionDate;
     }
 
     public Date getLastUpdated() {

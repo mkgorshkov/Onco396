@@ -47,6 +47,18 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         setCharts(1, isInPatientData(1).getDiagnosis());
     }
 
+    private void initAndSetCharts(Set<Patient> workingSet, int patientSer){
+        this.workingSet = workingSet;
+
+        setSizeFull();
+        setSpacing(true);
+        setMargin(true);
+
+        setTitle();
+        setCombo();
+        setCharts(patientSer, isInPatientData(patientSer).getDiagnosis());
+    }
+
     private void setTitle(){
         title.addStyleName(ValoTheme.LABEL_H2);
         addComponent(title);
@@ -145,7 +157,11 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         removeAllComponents();
-        init(((MainUI) getUI()).getPatientData());
+        if (((MainUI) getUI()).getCrtUser() != null) {
+            initAndSetCharts(((MainUI) getUI()).getPatientData(), Integer.parseInt(((MainUI) getUI()).getCrtUser()));
+        } else {
+            init(((MainUI) getUI()).getPatientData());
+        }
     }
 
     @Override
@@ -153,7 +169,6 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         removeComponent(chart);
         setCharts((Integer) selector.getValue(), isInPatientData((Integer) selector.getValue()).getDiagnosis());
     }
-
 
 }
 

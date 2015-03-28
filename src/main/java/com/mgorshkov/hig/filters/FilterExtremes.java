@@ -1,9 +1,9 @@
 package com.mgorshkov.hig.filters;
 
 import com.mgorshkov.hig.MainUI;
-import com.mgorshkov.hig.entities.Diagnosis;
-import com.mgorshkov.hig.entities.PatientDoctor;
-import com.mgorshkov.hig.entities.Priority;
+import com.mgorshkov.hig.business.entities.Diagnosis;
+import com.mgorshkov.hig.business.entities.PatientDoctor;
+import com.mgorshkov.hig.business.entities.Priority;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.vaadin.ui.UI;
