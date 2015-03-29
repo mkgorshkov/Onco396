@@ -3,6 +3,8 @@ package com.mgorshkov.hig.view;
 import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.addon.charts.Chart;
+import com.vaadin.addon.charts.PointClickEvent;
+import com.vaadin.addon.charts.PointClickListener;
 import com.vaadin.addon.charts.model.*;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
@@ -21,7 +23,7 @@ import java.util.Set;
 /**
  * @author Maxim Gorshkov <maxim.gorshkov<at>savoirfairelinux.com>
  */
-@CDIView(value = PatientSummaryView.VIEW_NAME)
+@CDIView(value = ChartsView.VIEW_NAME)
 public class ChartsView extends VerticalLayout implements View,ComboBox.ValueChangeListener {
 
     public final static String VIEW_NAME = "ChartsView";
@@ -125,6 +127,15 @@ public class ChartsView extends VerticalLayout implements View,ComboBox.ValueCha
         chart.drawChart(conf);
 
         chart.setSizeFull();
+
+        chart.addPointClickListener(new PointClickListener() {
+            @Override
+            public void onClick(PointClickEvent pointClickEvent) {
+                ((MainUI) getUI()).setCrtUser(pointClickEvent.getCategory());
+                getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+            }
+        });
+
         addComponent(chart);
 
         setExpandRatio(chart, 0.8f);
@@ -178,6 +189,9 @@ public class ChartsView extends VerticalLayout implements View,ComboBox.ValueCha
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         removeAllComponents();
+        if(workingSet == null){
+            getUI().getNavigator().navigateTo(MainView.VIEW_NAME);
+        }
         init(((MainUI) getUI()).getPatientData());
     }
 

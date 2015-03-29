@@ -59,6 +59,9 @@ public class TableView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         removeAllComponents();
+        if(workingSet == null){
+            getUI().getNavigator().navigateTo(MainView.VIEW_NAME);
+        }
         init();
     }
 }

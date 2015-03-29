@@ -157,6 +157,9 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         removeAllComponents();
+        if(workingSet == null){
+            getUI().getNavigator().navigateTo(MainView.VIEW_NAME);
+        }
         if (((MainUI) getUI()).getCrtUser() != null) {
             initAndSetCharts(((MainUI) getUI()).getPatientData(), Integer.parseInt(((MainUI) getUI()).getCrtUser()));
         } else {
@@ -167,6 +170,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
     @Override
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         removeComponent(chart);
+
         setCharts((Integer) selector.getValue(), isInPatientData((Integer) selector.getValue()).getDiagnosis());
     }
 

@@ -37,14 +37,16 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     Button charts = new Button("Stage", FontAwesome.BAR_CHART_O);
     Button chartsByDiagnosis = new Button("Stage and Diagnosis", FontAwesome.EDIT);
     Button patients = new Button("Patient", FontAwesome.USER);
-    Button chartsTimeline = new Button("Stage and Patient", FontAwesome.FILE_TEXT);
+    Button chartsTimeline = new Button("Oncologists", FontAwesome.FILE_TEXT);
     Button exportExcel = new Button("Export as CSV", FontAwesome.FILE_EXCEL_O);
-    Button globalOptionsButton = new Button(FontAwesome.GEARS);
+    Button globalOptionsButton = new Button("Settings", FontAwesome.GEARS);
+    Button outlierAnalysis = new Button("Outlier Analysis", FontAwesome.SEARCH);
     Button save = new Button(FontAwesome.SAVE);
     Button cancel = new Button(FontAwesome.TIMES);
 
 
     HorizontalLayout buttons = new HorizontalLayout();
+    HorizontalLayout buttons2 = new HorizontalLayout();
 
     VerticalLayout globalLayout = new VerticalLayout();
     Window options = new Window("Global Options", globalLayout);
@@ -64,38 +66,50 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         chartsByDiagnosis.addClickListener(this);
         save.addClickListener(this);
         cancel.addClickListener(this);
+        outlierAnalysis.addClickListener(this);
 
         buttons.addComponent(charts);
         buttons.addComponent(chartsByDiagnosis);
         buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
-        buttons.addComponent(exportExcel);
-        buttons.addComponent(globalOptionsButton);
+        buttons2.addComponent(exportExcel);
+        buttons2.addComponent(outlierAnalysis);
+        buttons2.addComponent(globalOptionsButton);
 
         buttons.setSpacing(true);
+        buttons2.setSpacing(true);
 
         Resource res = new ThemeResource("img/logo1.png");
         Image image = new Image(null, res);
         addComponent(image);
 
-        addComponent(buttons);
+        VerticalLayout v = new VerticalLayout(buttons, buttons2);
+        v.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
+        v.setComponentAlignment(buttons2, Alignment.MIDDLE_CENTER);
+        v.setSpacing(true);
+        v.setWidth("100%");
 
-        setComponentAlignment(buttons, Alignment.TOP_CENTER);
+        addComponent(v);
+
+        setComponentAlignment(v, Alignment.TOP_CENTER);
         setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+
 
         setWindow();
 
-        initialData = new AddAllData();
-        workingSet = initialData.getWorkingSet();
+        if(((MainUI) getUI()).getPatientData() == null || ((MainUI) getUI()).getPatientData().size() == 0){
+            initialData = new AddAllData();
+            workingSet = initialData.getWorkingSet();
 
-        filterStage = new FilterByStage(workingSet);
-        workingSet = filterStage.getWorkingSet();
+            filterStage = new FilterByStage(workingSet);
+            workingSet = filterStage.getWorkingSet();
 
-        filterExtremes = new FilterExtremes(workingSet);
-        workingSet = filterExtremes.getWorkingSet();
+            filterExtremes = new FilterExtremes(workingSet);
+            workingSet = filterExtremes.getWorkingSet();
 
-        ((MainUI) getUI()).setPatientData(workingSet);
-
+            ((MainUI) getUI()).setPatientData(workingSet);
+            ((MainUI) getUI()).setExtremeUsers(filterExtremes.getExtremes());
+        }
     }
 
     private void setWindow(){
@@ -116,6 +130,9 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         removeAllComponents();
+        if(workingSet == null){
+            getUI().getNavigator().navigateTo(MainView.VIEW_NAME);
+        }
         init();
     }
 
@@ -126,7 +143,7 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         }else if(clickEvent.getSource().equals(chartsByDiagnosis)){
             getUI().getNavigator().navigateTo(ChartsDiagnosisView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(chartsTimeline)){
-            getUI().getNavigator().navigateTo(ChartsTimelineView.VIEW_NAME);
+            getUI().getNavigator().navigateTo(OncologistView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(patients)){
             getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(exportExcel)){
@@ -139,6 +156,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
             Notification.show("Time Unit Updated", Notification.Type.TRAY_NOTIFICATION);
         }else if(clickEvent.getSource().equals(cancel)){
             options.close();
+        }else if(clickEvent.getSource().equals(outlierAnalysis)){
+            getUI().getNavigator().navigateTo(OutlierAnalysisView.VIEW_NAME);
         }
     }
 }

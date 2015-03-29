@@ -3,6 +3,7 @@ package com.mgorshkov.hig.model;
 import com.mgorshkov.hig.model.enums.DataPointType;
 import com.mgorshkov.hig.model.enums.Stage;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -41,5 +42,13 @@ public class DataPoint {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public boolean startsOnFriday(){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        c.setTime(timePoint);
+
+        return c.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
     }
 }

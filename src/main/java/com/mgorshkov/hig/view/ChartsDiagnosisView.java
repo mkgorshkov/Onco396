@@ -2,6 +2,7 @@ package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.filters.FilterByStageCodes;
+import com.mgorshkov.hig.model.DataPoint;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.PointClickEvent;
@@ -9,6 +10,7 @@ import com.vaadin.addon.charts.PointClickListener;
 import com.vaadin.addon.charts.model.*;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.filter.Not;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -183,7 +185,7 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
     }
 
-    private void drillDownGraph(int stage, String category, List<Patient> patients){
+    private void drillDownGraph(final int stage, String category, List<Patient> patients){
         removeComponent(chart);
         chart = new Chart(ChartType.COLUMN);
 
@@ -253,9 +255,29 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
         chart.addPointClickListener(new PointClickListener() {
             @Override
-            public void onClick(PointClickEvent pointClickEvent) {
-                ((MainUI) getUI()).setCrtUser(pointClickEvent.getCategory());
-                getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+            public void onClick(final PointClickEvent pointClickEvent) {
+                final Window w = new Window();
+                VerticalLayout v = new VerticalLayout();
+                w.setContent(v);
+                Button b = new Button("Go to specific view.");
+                v.addComponent(new Label("Starts on a Friday: " + checkIfWeekend(pointClickEvent.getCategory(), stage)));
+                v.addComponent(b);
+
+                w.center();
+                w.setWidth("300px");
+                v.setSpacing(true);
+                v.setMargin(true);
+
+                b.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent clickEvent) {
+                        w.close();
+                        ((MainUI) getUI()).setCrtUser(pointClickEvent.getCategory());
+                        getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+                    }
+                });
+
+                getUI().addWindow(w);
             }
         });
     }
@@ -301,6 +323,20 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         }
 
         return serialToReturn;
+    }
+
+    private boolean checkIfWeekend(String patientInfo, int stage){
+        Patient p = isInPatientData(Integer.parseInt(patientInfo));
+        Iterator<DataPoint> points = p.getDataPoints().iterator();
+
+        DataPoint d = null;
+        int i = 0;
+        while(i<=stage){
+            d = points.next();
+            i++;
+        }
+
+        return d.startsOnFriday();
     }
 
 
@@ -355,6 +391,15 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         }else if(selector.getValue().toString().equals(CHOICES[6])){
             setCharts(6,  filterByDiagnosis());
         }
+    }
+
+    public Patient isInPatientData(int setNum){
+        for(Patient p : workingSet){
+            if(p.getPatientSerNum() == setNum){
+                return p;
+            }
+        }
+        return null;
     }
 }
 

@@ -42,6 +42,8 @@ public class MainUI extends UI {
     private OncoTimeUnit globalTimeUnit;
     private Set<String> diagnosis;
     private String crtUser;
+    private Set<Integer> oncologists;
+    private Set<Set<Patient>> extremeUsers;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -104,5 +106,21 @@ public class MainUI extends UI {
 
     public void setCrtUser(String crtUser) {
         this.crtUser = crtUser;
+    }
+
+    public Set<Integer> getOncologists() {
+        return oncologists;
+    }
+
+    public void setOncologists(Set<Integer> oncologists) {
+        this.oncologists = oncologists;
+    }
+
+    public Set<Set<Patient>> getExtremeUsers() {
+        return extremeUsers;
+    }
+
+    public void setExtremeUsers(Set<Set<Patient>> extremeUsers) {
+        this.extremeUsers = extremeUsers;
     }
 }

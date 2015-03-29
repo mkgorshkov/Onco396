@@ -25,8 +25,13 @@ public class FilterExtremes {
     boolean setDebug = true; //Apologies to the JAVA gods for flag programming.
     boolean removeZeros = true;
 
+    Set<Patient> moreOneStd = new HashSet<>();
+    Set<Patient> moreTwoStd = new HashSet<>();
+    Set<Patient> moreThreeStd = new HashSet<>();
+
     @PersistenceContext(unitName = "hig20150218")
     EntityManager entityManager;
+    Set<Integer> oncologists = new HashSet<>();
 
     public FilterExtremes(Set<Patient> workingSet){
         this.workingSet = workingSet;
@@ -78,8 +83,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateFirstWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFirstWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -121,8 +133,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateSecondWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSecondWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -164,8 +183,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateThirdWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateThirdWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -207,8 +233,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateFourthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFourthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -250,8 +283,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateFifthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFifthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -293,8 +333,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateSixthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSixthWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -336,8 +383,15 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation || p.calculateSeventhWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) == 0){
                 it.remove();
+            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+                moreThreeStd.add(p);
+//                it.remove();
+            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+                moreTwoStd.add(p);
+            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+                moreOneStd.add(p);
             }
         }
 
@@ -358,9 +412,11 @@ public class FilterExtremes {
 
             int onco = addOncologistSerial(w.getPatientSerNum());
             w.setOncologist(onco);
+            oncologists.add(onco);
         }
 
         ((MainUI) UI.getCurrent()).setDiagnosis(diagnosis);
+        ((MainUI) UI.getCurrent()).setOncologists(oncologists);
     }
 
     private String addDiagnosisCode(int patientSerNum){
@@ -397,6 +453,17 @@ public class FilterExtremes {
         }catch(IndexOutOfBoundsException o){
             return 0;
         }
+    }
+
+    public Set<Set<Patient>> getExtremes(){
+        HashSet<Set<Patient>> extremes = new HashSet<>();
+        extremes.add(moreOneStd);
+        System.out.println(moreOneStd.size());
+        extremes.add(moreTwoStd);
+        System.out.println(moreTwoStd.size());
+        extremes.add(moreThreeStd);
+        System.out.println(moreThreeStd.size());
+        return extremes;
     }
 
     private void setEntityManager(){
