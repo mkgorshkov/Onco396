@@ -189,6 +189,7 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle(CHOICES[stage]);
+        conf.setSubTitle("Subcategory: "+category);
 
         XAxis x = new XAxis();
 

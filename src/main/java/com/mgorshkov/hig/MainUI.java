@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.business.services.SessionBean;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Theme("mytheme")
 @CDIUI(value = "")
 @Widgetset("com.mgorshkov.hig.MyAppWidgetset")
+@PreserveOnRefresh
 public class MainUI extends UI {
 
     @Inject

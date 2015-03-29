@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * @author Maxim Gorshkov <maxim.gorshkov<at>savoirfairelinux.com>
  */
-@CDIView(value = PatientSummaryView.VIEW_NAME)
+@CDIView(value = ChartsTimelineView.VIEW_NAME)
 public class ChartsTimelineView extends VerticalLayout implements View,Button.ClickListener {
 
     public final static String VIEW_NAME = "ChartsTimelineView";
