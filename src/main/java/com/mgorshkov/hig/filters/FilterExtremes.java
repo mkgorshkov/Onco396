@@ -6,6 +6,7 @@ import com.mgorshkov.hig.business.entities.PatientDoctor;
 import com.mgorshkov.hig.business.entities.Priority;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
+import com.mgorshkov.hig.model.enums.PriorityCode;
 import com.vaadin.ui.UI;
 
 import javax.persistence.EntityManager;
@@ -408,7 +409,7 @@ public class FilterExtremes {
             diagnosis.add(diag);
 
             String priority = addPriorityCode(w.getPatientSerNum());
-            w.setPriorityCode(priority);
+            w.setPriorityCode(PriorityCode.getPCode(priority));
 
             int onco = addOncologistSerial(w.getPatientSerNum());
             w.setOncologist(onco);

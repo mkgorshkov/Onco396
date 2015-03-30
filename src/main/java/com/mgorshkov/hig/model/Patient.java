@@ -1,8 +1,12 @@
 package com.mgorshkov.hig.model;
 
+import com.mgorshkov.hig.business.entities.Priority;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
+import com.mgorshkov.hig.model.enums.PriorityCode;
 import com.mgorshkov.hig.model.enums.Stage;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +18,7 @@ public class Patient {
     private int PatientSerNum;
     private HashSet<DataPoint> DataPoints;
     private String diagnosis;
-    private String priorityCode;
+    private PriorityCode priorityCode;
     private int oncologist;
 
     public Patient(int patient){
@@ -22,7 +26,7 @@ public class Patient {
         DataPoints = new HashSet<>();
         diagnosis = "";
         oncologist = 0;
-        priorityCode = "";
+        priorityCode = PriorityCode.NA;
     }
 
     public void addDataPoint(DataPoint d){
@@ -288,11 +292,11 @@ public class Patient {
         this.diagnosis = diagnosis;
     }
 
-    public String getPriorityCode() {
+    public PriorityCode getPriorityCode() {
         return priorityCode;
     }
 
-    public void setPriorityCode(String priorityCode) {
+    public void setPriorityCode(PriorityCode priorityCode) {
         this.priorityCode = priorityCode;
     }
 
@@ -302,5 +306,38 @@ public class Patient {
 
     public void setOncologist(int oncologist) {
         this.oncologist = oncologist;
+    }
+
+    public boolean isUndergoingTreatment(Date date){
+        boolean afterFirst = false;
+        boolean beforeLast = false;
+
+        for(DataPoint d : DataPoints){
+            if(d.getStage().equals(Stage.CT_SCAN)){
+                if(d.getTimePoint().before(date)) afterFirst = true;
+            }else if(d.getStage().equals(Stage.READY_FOR_TREATMENT)){
+                if(d.getTimePoint().after(date)) beforeLast = true;
+            }
+        }
+
+        return (afterFirst && beforeLast);
+    }
+
+    public Stage getCurrentStage(Date date){
+        DataPoint[] ordered = new DataPoint[8];
+
+        Iterator<DataPoint> it = DataPoints.iterator();
+        while(it.hasNext()){
+            DataPoint d = it.next();
+            ordered[d.getStage().ordinal()] = d;
+        }
+
+        for(int i = 0; i<ordered.length; i++){
+            if(ordered[i].getTimePoint().before(date) && ordered[i+1].getTimePoint().after(date)){
+                return Stage.values()[i];
+            }
+        }
+
+        return null;
     }
 }

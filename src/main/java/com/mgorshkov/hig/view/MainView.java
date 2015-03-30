@@ -41,6 +41,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     Button exportExcel = new Button("Export as CSV", FontAwesome.FILE_EXCEL_O);
     Button globalOptionsButton = new Button("Settings", FontAwesome.GEARS);
     Button outlierAnalysis = new Button("Outlier Analysis", FontAwesome.SEARCH);
+    Button timelineView = new Button("Patient Timeline", FontAwesome.CALENDAR);
+
     Button save = new Button(FontAwesome.SAVE);
     Button cancel = new Button(FontAwesome.TIMES);
 
@@ -67,11 +69,13 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         save.addClickListener(this);
         cancel.addClickListener(this);
         outlierAnalysis.addClickListener(this);
+        timelineView.addClickListener(this);
 
         buttons.addComponent(charts);
         buttons.addComponent(chartsByDiagnosis);
         buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
+        buttons.addComponent(timelineView);
         buttons2.addComponent(exportExcel);
         buttons2.addComponent(outlierAnalysis);
         buttons2.addComponent(globalOptionsButton);
@@ -119,12 +123,12 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         timeUnit.setNullSelectionAllowed(false);
         timeUnit.setValue(((MainUI) getUI()).getTimeUnit());
 
+
+
         globalLayout.setMargin(true);
         globalLayout.setSpacing(true);
         globalLayout.addComponent(timeUnit);
         globalLayout.addComponent(new HorizontalLayout(save, cancel));
-//        globalLayout.addComponent(save);
-//        globalLayout.addComponent(cancel);
     }
 
     @Override
@@ -158,6 +162,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
             options.close();
         }else if(clickEvent.getSource().equals(outlierAnalysis)){
             getUI().getNavigator().navigateTo(OutlierAnalysisView.VIEW_NAME);
+        }else if(clickEvent.getSource().equals(timelineView)){
+            getUI().getNavigator().navigateTo(PatientSummaryView.VIEW_NAME);
         }
     }
 }
