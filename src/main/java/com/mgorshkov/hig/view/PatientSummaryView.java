@@ -67,23 +67,7 @@ public class PatientSummaryView extends VerticalLayout implements View{
 
         Legend legend = new Legend();
         legend.setBackgroundColor("#FFFFFF");
-        legend.setReversed(true);
-
-        PlotLine plotLine = new PlotLine();
-        plotLine.setColor(new SolidColor("red"));
-        plotLine.setValue(9);
-        plotLine.setWidth(3);
-        plotLine.setzIndex(0);
-        plotLine.setDashStyle(DashStyle.SOLID);
-        PlotBandLabel label = new PlotBandLabel("Today: "+c.getTime());
-        label.setAlign(HorizontalAlign.RIGHT);
-        label.setVerticalAlign(VerticalAlign.TOP);
-        label.setRotation(360);
-        Style style = new Style();
-        style.setColor(new SolidColor("gray"));
-        label.setStyle(style);
-        plotLine.setLabel(label);
-        y.setPlotLines(plotLine);
+        legend.setReversed(false);
 
         PlotOptionsSeries plot = new PlotOptionsSeries();
         plot.setStacking(Stacking.NORMAL);
@@ -91,14 +75,13 @@ public class PatientSummaryView extends VerticalLayout implements View{
         conf.setLegend(legend);
 
         conf.setPlotOptions(plot);
-
-        conf.addSeries(new ListSeries("Ready For Treatment", addValueByStage(Stage.PHYSICS_QA)));
-        conf.addSeries(new ListSeries("Physics QA", addValueByStage(Stage.MD_APPROVE)));
-        conf.addSeries(new ListSeries("MD Approve", addValueByStage(Stage.DOSE_CALCULATION)));
-        conf.addSeries(new ListSeries("Dose Calculation", addValueByStage(Stage.CT_PLANNING_SHEET)));
-        conf.addSeries(new ListSeries("CT Planning Sheet", addValueByStage(Stage.MD_CONTOUR)));
-        conf.addSeries(new ListSeries("MD Contour", addValueByStage(Stage.INITIAL_CONTOUR)));
         conf.addSeries(new ListSeries("Initial Contour", addValueByStage(Stage.CT_SCAN)));
+        conf.addSeries(new ListSeries("MD Contour", addValueByStage(Stage.INITIAL_CONTOUR)));
+        conf.addSeries(new ListSeries("CT Planning Sheet", addValueByStage(Stage.MD_CONTOUR)));
+        conf.addSeries(new ListSeries("Dose Calculation", addValueByStage(Stage.CT_PLANNING_SHEET)));
+        conf.addSeries(new ListSeries("MD Approve", addValueByStage(Stage.DOSE_CALCULATION)));
+        conf.addSeries(new ListSeries("Physics QA", addValueByStage(Stage.MD_APPROVE)));
+        conf.addSeries(new ListSeries("Ready For Treatment", addValueByStage(Stage.PHYSICS_QA)));
 //
 //        Tooltip tooltip = new Tooltip();
 //        tooltip.setFormatter("this.y +' days estimated remaining for '+ this.series.name +' 6 days estimated total.'");
@@ -119,7 +102,7 @@ public class PatientSummaryView extends VerticalLayout implements View{
         int i = 0;
         while(it.hasNext()){
             Patient p = it.next();
-            third[i] = valueOrElapsedSoFar(p, s);
+            third[i] = -valueOrElapsedSoFar(p, s);
             i++;
         }
 
@@ -141,7 +124,7 @@ public class PatientSummaryView extends VerticalLayout implements View{
 
     public Double valueOrElapsedSoFar(Patient p, Stage s){
 
-        if(p.getCurrentStage(c.getTime()).compareTo(s) < 1){
+        if(p.getCurrentStage(c.getTime()).compareTo(s) > 1){
             if(s.equals(Stage.CT_SCAN)){
                 return p.calculateFirstWait(((MainUI) getUI()).getTimeUnit());
             }if(s.equals(Stage.INITIAL_CONTOUR)){

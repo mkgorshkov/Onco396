@@ -42,6 +42,7 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     Button globalOptionsButton = new Button("Settings", FontAwesome.GEARS);
     Button outlierAnalysis = new Button("Outlier Analysis", FontAwesome.SEARCH);
     Button timelineView = new Button("Patient Timeline", FontAwesome.CALENDAR);
+    Button calendarView = new Button("Calendar View", FontAwesome.CALENDAR_O);
 
     Button save = new Button(FontAwesome.SAVE);
     Button cancel = new Button(FontAwesome.TIMES);
@@ -70,12 +71,14 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         cancel.addClickListener(this);
         outlierAnalysis.addClickListener(this);
         timelineView.addClickListener(this);
+        calendarView.addClickListener(this);
 
         buttons.addComponent(charts);
         buttons.addComponent(chartsByDiagnosis);
         buttons.addComponent(chartsTimeline);
         buttons.addComponent(patients);
         buttons.addComponent(timelineView);
+        buttons2.addComponent(calendarView);
         buttons2.addComponent(exportExcel);
         buttons2.addComponent(outlierAnalysis);
         buttons2.addComponent(globalOptionsButton);
@@ -164,6 +167,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
             getUI().getNavigator().navigateTo(OutlierAnalysisView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(timelineView)){
             getUI().getNavigator().navigateTo(PatientSummaryView.VIEW_NAME);
+        }else if(clickEvent.getSource().equals(calendarView)){
+            getUI().getNavigator().navigateTo(CalendarView.VIEW_ID);
         }
     }
 }
