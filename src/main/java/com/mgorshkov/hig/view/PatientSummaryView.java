@@ -69,6 +69,22 @@ public class PatientSummaryView extends VerticalLayout implements View{
         legend.setBackgroundColor("#FFFFFF");
         legend.setReversed(false);
 
+        PlotLine plotLine = new PlotLine();
+        plotLine.setColor(new SolidColor("black"));
+        plotLine.setValue(0);
+        plotLine.setWidth(3);
+        plotLine.setzIndex(0);
+        plotLine.setDashStyle(DashStyle.SOLID);
+        PlotBandLabel label = new PlotBandLabel("Today: "+c.getTime());
+        label.setAlign(HorizontalAlign.RIGHT);
+        label.setVerticalAlign(VerticalAlign.TOP);
+        label.setRotation(360);
+        Style style = new Style();
+        style.setColor(new SolidColor("gray"));
+        label.setStyle(style);
+        plotLine.setLabel(label);
+        y.setPlotLines(plotLine);
+
         PlotOptionsSeries plot = new PlotOptionsSeries();
         plot.setStacking(Stacking.NORMAL);
 

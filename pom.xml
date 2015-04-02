@@ -15,6 +15,7 @@
 		<project.source.version>1.7</project.source.version>
 		<project.target.version>1.7</project.target.version>
         <vaadin.cdi.version>1.0.2</vaadin.cdi.version>
+		<mahoot.version>0.9</mahoot.version>
         <project.encoding>UTF-8</project.encoding>
 	</properties>
 
