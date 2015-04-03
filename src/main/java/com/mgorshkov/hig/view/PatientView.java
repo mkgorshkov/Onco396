@@ -27,8 +27,6 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
     public final static String VIEW_NAME = "PatientView";
     Set<Patient> workingSet = new HashSet<>();
 
-    Label title = new Label(VIEW_NAME);
-
     final static String[] labels = {"Stage 1: CT Scan - Initial Contour", "Stage 2: Initial Contour - MD Contour", "Stage 3: MD Contour - CT Planning Sheet", "Stage 4: CT Planning Sheet - Dose Calculation", "Stage 5: Dose Calculation - MD Approve", "Stage 6: MD Approve - Physics QA", "Stage 7: Physics QA - Ready for Treatement"};
 
     int[] choices;
@@ -42,7 +40,6 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         setSpacing(true);
         setMargin(true);
 
-        setTitle();
         setCombo();
         setCharts(1, isInPatientData(1).getDiagnosis());
     }
@@ -54,15 +51,16 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         setSpacing(true);
         setMargin(true);
 
-        setTitle();
-        setCombo();
-        setCharts(patientSer, isInPatientData(patientSer).getDiagnosis());
-    }
+        selector = patientSerNums(selector);
 
-    private void setTitle(){
-        title.addStyleName(ValoTheme.LABEL_H2);
-        addComponent(title);
-        setExpandRatio(title, 0.1f);
+        selector.setWidth("100%");
+        selector.setValue(patientSer);
+        selector.addValueChangeListener(this);
+
+        addComponent(selector);
+        setExpandRatio(selector, 0.1f);
+
+        setCharts(patientSer, isInPatientData(patientSer).getDiagnosis());
     }
 
     private void setCombo(){
@@ -141,7 +139,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         chart.setSizeFull();
         addComponent(chart);
 
-        setExpandRatio(chart, 0.8f);
+        setExpandRatio(chart, 0.9f);
 
     }
 
@@ -170,7 +168,6 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
     @Override
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         removeComponent(chart);
-
         setCharts((Integer) selector.getValue(), isInPatientData((Integer) selector.getValue()).getDiagnosis());
     }
 

@@ -74,10 +74,41 @@ public class OutlierAnalysisView extends VerticalLayout implements View {
 
         t.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
-            public void itemClick(ItemClickEvent itemClickEvent) {
+            public void itemClick(final ItemClickEvent itemClickEvent) {
                 if (itemClickEvent.isDoubleClick()) {
-                    ((MainUI) getUI()).setCrtUser(""+itemClickEvent.getItem().getItemProperty("Patient Ser"));
-                    getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+
+                    final Window w = new Window();
+                    VerticalLayout v = new VerticalLayout();
+                    w.setContent(v);
+                    Button b = new Button("Go to specific view.");
+                    Button b2 = new Button("Go to calendar view");
+                    v.addComponent(b);
+                    v.addComponent(b2);
+
+                    w.center();
+                    w.setWidth("300px");
+                    v.setSpacing(true);
+                    v.setMargin(true);
+
+                    b.addClickListener(new Button.ClickListener() {
+                        @Override
+                        public void buttonClick(Button.ClickEvent clickEvent) {
+                            w.close();
+                            ((MainUI) getUI()).setCrtUser(""+itemClickEvent.getItem().getItemProperty("Patient Ser"));
+                            getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+                        }
+                    });
+
+                    b2.addClickListener(new Button.ClickListener() {
+                        @Override
+                        public void buttonClick(Button.ClickEvent clickEvent) {
+                            w.close();
+                            ((MainUI) getUI()).setCrtUser("" + itemClickEvent.getItem().getItemProperty("Patient Ser"));
+                            getUI().getNavigator().navigateTo(CalendarView.VIEW_ID);
+                        }
+                    });
+
+                    getUI().addWindow(w);
                 }
             }
         });
