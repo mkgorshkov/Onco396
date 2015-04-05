@@ -92,7 +92,9 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
 
         XAxis x = new XAxis();
         x.setCategories(patientSerNums);
-        x.setTitle("Patient Serial Number");
+        Labels yLabel = new Labels();
+        yLabel.setEnabled(false);
+        x.setLabels(yLabel);
         conf.addxAxis(x);
 
         YAxis y = new YAxis();

@@ -4,6 +4,7 @@ import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.business.entities.Diagnosis;
 import com.mgorshkov.hig.business.entities.PatientDoctor;
 import com.mgorshkov.hig.business.entities.Priority;
+import com.mgorshkov.hig.model.DiagnosisModel;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.mgorshkov.hig.model.enums.PriorityCode;
@@ -401,10 +402,10 @@ public class FilterExtremes {
     }
 
     private void addDiagnosis(){
-        HashSet<String> diagnosis = new HashSet<>();
+        HashSet<DiagnosisModel> diagnosis = new HashSet<>();
 
         for(Patient w : workingSet){
-            String diag = addDiagnosisCode(w.getPatientSerNum());
+            DiagnosisModel diag = addDiagnosisCode(w.getPatientSerNum());
             w.setDiagnosis(diag);
             diagnosis.add(diag);
 
@@ -420,15 +421,18 @@ public class FilterExtremes {
         ((MainUI) UI.getCurrent()).setOncologists(oncologists);
     }
 
-    private String addDiagnosisCode(int patientSerNum){
+    private DiagnosisModel addDiagnosisCode(int patientSerNum){
         TypedQuery<Diagnosis> diag = entityManager.createNamedQuery("Diagnosis.findBySer", Diagnosis.class);
         diag.setParameter("patientSerNum", patientSerNum);
 
         try{
             Diagnosis d = diag.getResultList().get(0);
-            return d.getDiagnosisCode();
+            DiagnosisModel dModel = new DiagnosisModel();
+            dModel.setCategory(d.getDiagnosisCode());
+            dModel.setDescription(d.getDescription());
+            return dModel;
         }catch(IndexOutOfBoundsException o){
-            return "";
+            return null;
         }
     }
 

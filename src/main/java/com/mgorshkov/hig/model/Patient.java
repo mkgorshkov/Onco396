@@ -17,14 +17,13 @@ import java.util.concurrent.TimeUnit;
 public class Patient {
     private int PatientSerNum;
     private HashSet<DataPoint> DataPoints;
-    private String diagnosis;
+    private DiagnosisModel diagnosis;
     private PriorityCode priorityCode;
     private int oncologist;
 
     public Patient(int patient){
         PatientSerNum = patient;
         DataPoints = new HashSet<>();
-        diagnosis = "";
         oncologist = 0;
         priorityCode = PriorityCode.NA;
     }
@@ -284,14 +283,6 @@ public class Patient {
         return minutes;
     }
 
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
     public PriorityCode getPriorityCode() {
         return priorityCode;
     }
@@ -339,5 +330,13 @@ public class Patient {
         }
 
         return null;
+    }
+
+    public DiagnosisModel getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(DiagnosisModel diagnosis) {
+        this.diagnosis = diagnosis;
     }
 }

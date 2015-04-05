@@ -1,5 +1,7 @@
 package com.mgorshkov.hig.business.utils;
 
+import com.mgorshkov.hig.model.DiagnosisModel;
+
 import java.util.Comparator;
 
 /**
@@ -11,11 +13,15 @@ public class DiagnosisSorter implements Comparator<String> {
         //See if the first place is an int or letter
         if(o1.isEmpty()){
             return 1;
-        }else if(o2.isEmpty()){
+        }else if(o2.isEmpty()) {
             return -1;
         }else if(o1.substring(0, 1).compareTo(o2.substring(0,1)) == 0){
-            return Integer.parseInt(o1.substring(1)) - Integer.parseInt(o2.substring(1));
+            try{
+                return Integer.parseInt(o1.substring(1)) - Integer.parseInt(o2.substring(1));
+            }catch(NumberFormatException e){
+
+            }
         }
-        return o1.substring(0, 1).compareTo(o2.substring(0,1));
+        return o1.substring(0, 1).compareTo(o2.substring(0, 1));
     }
 }

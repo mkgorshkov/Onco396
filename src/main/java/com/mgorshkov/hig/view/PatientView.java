@@ -1,6 +1,7 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
+import com.mgorshkov.hig.model.DiagnosisModel;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.*;
@@ -98,12 +99,12 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         return selector;
     }
 
-    private void setCharts(int patientSer, String diagnosis){
+    private void setCharts(int patientSer, DiagnosisModel diagnosis){
         chart = new Chart(ChartType.BAR);
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Stages: "+patientSer);
-        conf.setSubTitle("Diagnosis: "+diagnosis);
+        conf.setSubTitle("Diagnosis: "+diagnosis.getDescription()+" ("+diagnosis.getCategory()+") ");
 
 
         XAxis x = new XAxis();
