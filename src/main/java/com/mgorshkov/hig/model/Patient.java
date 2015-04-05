@@ -332,6 +332,10 @@ public class Patient {
         return null;
     }
 
+    public double calculateTotalWaitingTime(OncoTimeUnit t){
+        return calculateFirstWait(t) + calculateSecondWait(t) + calculateThirdWait(t) + calculateFourthWait(t) + calculateFifthWait(t) + calculateSixthWait(t) + calculateSeventhWait(t);
+    }
+
     public DiagnosisModel getDiagnosis() {
         return diagnosis;
     }

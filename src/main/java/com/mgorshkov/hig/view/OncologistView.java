@@ -1,6 +1,7 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
+import com.mgorshkov.hig.business.utils.WaitingTimeSorter;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.PointClickEvent;
@@ -85,17 +86,6 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
             }
         }
 
-        String[] patientSerNums = new String[toDisplay.size()];
-        for(int i = 0; i<patientSerNums.length; i++){
-            patientSerNums[i] = ""+toDisplay.get(i).getPatientSerNum();
-        }
-
-        XAxis x = new XAxis();
-        x.setCategories(patientSerNums);
-        Labels yLabel = new Labels();
-        yLabel.setEnabled(false);
-        x.setLabels(yLabel);
-        conf.addxAxis(x);
 
         YAxis y = new YAxis();
         y.setTitle("Waiting Time " + (((MainUI) getUI()).getTimeUnit()));
@@ -110,22 +100,36 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
         legend.setReversed(true);
         conf.setLegend(legend);
 
-        Double[] allSeven = new Double[toDisplay.size()];
-        Double[] allSix = new Double[toDisplay.size()];
-        Double[] allFive = new Double[toDisplay.size()];
-        Double[] allFour = new Double[toDisplay.size()];
-        Double[] allThree = new Double[toDisplay.size()];
-        Double[] allTwo = new Double[toDisplay.size()];
-        Double[] allOne = new Double[toDisplay.size()];
+        ArrayList<Patient> sortedpatients = putInDescendingOrder(toDisplay);
 
-        for(int i = 0; i<toDisplay.size(); i++) {
-            allSeven[i] = toDisplay.get(i).calculateSeventhWait(((MainUI) getUI()).getTimeUnit());
-            allSix[i] = toDisplay.get(i).calculateSixthWait(((MainUI) getUI()).getTimeUnit());
-            allFive[i] = toDisplay.get(i).calculateFifthWait(((MainUI) getUI()).getTimeUnit());
-            allFour[i] = toDisplay.get(i).calculateFourthWait(((MainUI) getUI()).getTimeUnit());
-            allThree[i] = toDisplay.get(i).calculateThirdWait(((MainUI) getUI()).getTimeUnit());
-            allTwo[i] = toDisplay.get(i).calculateSecondWait(((MainUI) getUI()).getTimeUnit());
-            allOne[i] = toDisplay.get(i).calculateFirstWait(((MainUI) getUI()).getTimeUnit());
+        String[] patientSerNums = new String[toDisplay.size()];
+        for(int i = 0; i<sortedpatients.size(); i++){
+            patientSerNums[i] = ""+sortedpatients.get(i).getPatientSerNum();
+        }
+
+        XAxis x = new XAxis();
+        x.setCategories(patientSerNums);
+        Labels yLabel = new Labels();
+        yLabel.setEnabled(false);
+        x.setLabels(yLabel);
+        conf.addxAxis(x);
+
+        Double[] allSeven = new Double[sortedpatients.size()];
+        Double[] allSix = new Double[sortedpatients.size()];
+        Double[] allFive = new Double[sortedpatients.size()];
+        Double[] allFour = new Double[sortedpatients.size()];
+        Double[] allThree = new Double[sortedpatients.size()];
+        Double[] allTwo = new Double[sortedpatients.size()];
+        Double[] allOne = new Double[sortedpatients.size()];
+
+        for(int i = 0; i<sortedpatients.size(); i++) {
+            allSeven[i] = sortedpatients.get(i).calculateSeventhWait(((MainUI) getUI()).getTimeUnit());
+            allSix[i] = sortedpatients.get(i).calculateSixthWait(((MainUI) getUI()).getTimeUnit());
+            allFive[i] = sortedpatients.get(i).calculateFifthWait(((MainUI) getUI()).getTimeUnit());
+            allFour[i] = sortedpatients.get(i).calculateFourthWait(((MainUI) getUI()).getTimeUnit());
+            allThree[i] = sortedpatients.get(i).calculateThirdWait(((MainUI) getUI()).getTimeUnit());
+            allTwo[i] = sortedpatients.get(i).calculateSecondWait(((MainUI) getUI()).getTimeUnit());
+            allOne[i] = sortedpatients.get(i).calculateFirstWait(((MainUI) getUI()).getTimeUnit());
 
         }
         conf.addSeries(new ListSeries(LABELS[6], allSeven));
@@ -167,6 +171,14 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
         if(chart == null) removeComponent(CHOOSE_SOMETHING);
         if(chart != null) removeComponent(chart);
         setCharts((Integer) selector.getValue());
+    }
+
+    private ArrayList<Patient> putInDescendingOrder(List<Patient> input){
+        ArrayList<Patient> sorted = new ArrayList<>();
+        sorted.addAll(input);
+        Collections.sort(sorted, new WaitingTimeSorter());
+
+        return sorted;
     }
 }
 
