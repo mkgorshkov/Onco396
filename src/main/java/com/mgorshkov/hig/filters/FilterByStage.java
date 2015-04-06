@@ -95,7 +95,7 @@ public class FilterByStage {
     }
 
     private HashSet<DataPoint> checkChronological(Set<DataPoint> inPoints){
-        HashSet<DataPoint> sortedPoints = new HashSet<DataPoint>();
+        HashSet<DataPoint> sortedPoints = new HashSet<>();
 
         ArrayList<DataPoint> inOrder = new ArrayList<>();
         inOrder.addAll(inPoints);

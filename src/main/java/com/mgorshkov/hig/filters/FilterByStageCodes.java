@@ -27,7 +27,6 @@ public class FilterByStageCodes {
         for(Patient p : workingSet){
             DiagnosisModel diagnosis = p.getDiagnosis();
             if(diagnosis == null){
-                System.out.println("Null: "+p.getPatientSerNum());
                 diagnosis = new DiagnosisModel("NA", "NA.NA");
             }
 

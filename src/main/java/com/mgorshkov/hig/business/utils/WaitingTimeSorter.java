@@ -11,9 +11,9 @@ import java.util.Comparator;
 public class WaitingTimeSorter implements Comparator<Patient> {
     @Override
     public int compare(Patient o1, Patient o2) {
-        if(o1.calculateTotalWaitingTime(OncoTimeUnit.MINUTES) < o2.calculateTotalWaitingTime(OncoTimeUnit.MINUTES)){
+        if(o1.calculateTotalWaitingTime(OncoTimeUnit.MINUTES, false) < o2.calculateTotalWaitingTime(OncoTimeUnit.MINUTES, false)){
             return -1;
-        }else if(o1.calculateTotalWaitingTime(OncoTimeUnit.MINUTES) > o2.calculateTotalWaitingTime(OncoTimeUnit.MINUTES)){
+        }else if(o1.calculateTotalWaitingTime(OncoTimeUnit.MINUTES, false) > o2.calculateTotalWaitingTime(OncoTimeUnit.MINUTES, false)){
             return 1;
         }
         return 0;

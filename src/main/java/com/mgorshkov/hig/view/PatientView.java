@@ -104,7 +104,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Stages: "+patientSer);
-        conf.setSubTitle("Diagnosis: "+diagnosis.getDescription()+" ("+diagnosis.getCategory()+") ");
+        conf.setSubTitle("Diagnosis: " + diagnosis.getDescription() + " (" + diagnosis.getCategory() + ") ");
 
 
         XAxis x = new XAxis();
@@ -113,7 +113,7 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
         conf.addxAxis(x);
 
         YAxis y = new YAxis();
-        y.setTitle("Waiting Time "+(((MainUI) getUI()).getTimeUnit()));
+        y.setTitle("Waiting Time " + (((MainUI) getUI()).getTimeUnit()));
         conf.addyAxis(y);
 
         PlotOptionsSeries plot = new PlotOptionsSeries();
@@ -127,13 +127,13 @@ public class PatientView extends VerticalLayout implements View,ComboBox.ValueCh
 
         Patient p = isInPatientData(patientSer);
 
-        conf.addSeries(new ListSeries(labels[6], p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit())));
-        conf.addSeries(new ListSeries(labels[5], p.calculateSixthWait(((MainUI) getUI()).getTimeUnit())));
-        conf.addSeries(new ListSeries(labels[4], p.calculateFifthWait(((MainUI) getUI()).getTimeUnit())));
-        conf.addSeries(new ListSeries(labels[3], p.calculateFourthWait(((MainUI) getUI()).getTimeUnit())));
-        conf.addSeries(new ListSeries(labels[2], p.calculateThirdWait(((MainUI) getUI()).getTimeUnit())));
-        conf.addSeries(new ListSeries(labels[1], p.calculateSecondWait(((MainUI) getUI()).getTimeUnit())));
-        conf.addSeries(new ListSeries(labels[0], p.calculateFirstWait(((MainUI) getUI()).getTimeUnit())));
+        conf.addSeries(new ListSeries(labels[6], p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
+        conf.addSeries(new ListSeries(labels[5], p.calculateSixthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
+        conf.addSeries(new ListSeries(labels[4], p.calculateFifthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
+        conf.addSeries(new ListSeries(labels[3], p.calculateFourthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
+        conf.addSeries(new ListSeries(labels[2], p.calculateThirdWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
+        conf.addSeries(new ListSeries(labels[1], p.calculateSecondWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
+        conf.addSeries(new ListSeries(labels[0], p.calculateFirstWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
 
         chart.drawChart(conf);
 

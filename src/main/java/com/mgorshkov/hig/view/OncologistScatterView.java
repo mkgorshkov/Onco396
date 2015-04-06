@@ -124,13 +124,13 @@ public class OncologistScatterView extends VerticalLayout implements View, Combo
         Double[] allOne = new Double[sortedpatients.size()];
 
         for(int i = 0; i<sortedpatients.size(); i++) {
-            allSeven[i] = sortedpatients.get(i).calculateSeventhWait(((MainUI) getUI()).getTimeUnit());
-            allSix[i] = sortedpatients.get(i).calculateSixthWait(((MainUI) getUI()).getTimeUnit());
-            allFive[i] = sortedpatients.get(i).calculateFifthWait(((MainUI) getUI()).getTimeUnit());
-            allFour[i] = sortedpatients.get(i).calculateFourthWait(((MainUI) getUI()).getTimeUnit());
-            allThree[i] = sortedpatients.get(i).calculateThirdWait(((MainUI) getUI()).getTimeUnit());
-            allTwo[i] = sortedpatients.get(i).calculateSecondWait(((MainUI) getUI()).getTimeUnit());
-            allOne[i] = sortedpatients.get(i).calculateFirstWait(((MainUI) getUI()).getTimeUnit());
+            allSeven[i] = sortedpatients.get(i).calculateSeventhWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
+            allSix[i] = sortedpatients.get(i).calculateSixthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
+            allFive[i] = sortedpatients.get(i).calculateFifthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
+            allFour[i] = sortedpatients.get(i).calculateFourthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
+            allThree[i] = sortedpatients.get(i).calculateThirdWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
+            allTwo[i] = sortedpatients.get(i).calculateSecondWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
+            allOne[i] = sortedpatients.get(i).calculateFirstWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
 
         }
         conf.addSeries(new ListSeries(LABELS[6], allSeven));

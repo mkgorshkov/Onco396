@@ -83,37 +83,37 @@ public class ChartsView extends VerticalLayout implements View,ComboBox.ValueCha
 
         if (stage == 0) {
             for(Patient p : workingSet){
-                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }else if(stage == 1){
             for(Patient p : workingSet){
-                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }else if(stage == 2){
             for(Patient p : workingSet){
-                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }else if(stage == 3){
             for(Patient p : workingSet){
-                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }else if(stage == 4){
             for(Patient p : workingSet){
-                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }else if(stage == 5){
             for(Patient p : workingSet){
-                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }else if(stage == 6){
             for(Patient p : workingSet){
-                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays()));
 
             }
         }

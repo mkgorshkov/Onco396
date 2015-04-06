@@ -61,7 +61,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateFirstWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateFirstWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -70,7 +70,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateFirstWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateFirstWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -85,14 +85,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFirstWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFirstWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateFirstWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }
@@ -111,7 +111,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateSecondWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateSecondWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -120,7 +120,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateSecondWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateSecondWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -135,14 +135,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSecondWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSecondWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateSecondWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }
@@ -161,7 +161,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateThirdWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateThirdWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -170,7 +170,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateThirdWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateThirdWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -185,14 +185,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateThirdWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateThirdWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateThirdWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }
@@ -211,7 +211,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateFourthWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateFourthWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -220,7 +220,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateFourthWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateFourthWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -235,14 +235,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFourthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFourthWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateFourthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }
@@ -261,7 +261,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateFifthWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateFifthWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -270,7 +270,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateFifthWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateFifthWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -285,14 +285,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateFifthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateFifthWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateFifthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }
@@ -311,7 +311,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateSixthWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateSixthWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -320,7 +320,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateSixthWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateSixthWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -335,14 +335,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSixthWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSixthWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateSixthWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }
@@ -361,7 +361,7 @@ public class FilterExtremes {
         double standardDeviation = 0;
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateSeventhWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateSeventhWait(OncoTimeUnit.MINUTES, false);
             if(waitingTime == 0){
                 zeroValues++;
             }
@@ -370,7 +370,7 @@ public class FilterExtremes {
         totalForAverage = totalForAverage/(workingSet.size() - zeroValues);
 
         for(Patient p : workingSet){
-            double waitingTime = p.calculateSeventhWait(OncoTimeUnit.MINUTES);
+            double waitingTime = p.calculateSeventhWait(OncoTimeUnit.MINUTES, false);
 
             if(waitingTime != 0){
                 variance += (waitingTime - totalForAverage)*(waitingTime - totalForAverage);
@@ -385,14 +385,14 @@ public class FilterExtremes {
         Iterator<Patient> it = workingSet.iterator();
         while(it.hasNext()){
             Patient p = it.next();
-            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) == 0){
+            if(p.calculateSeventhWait(OncoTimeUnit.MINUTES, false) == 0){
                 it.remove();
-            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 3*standardDeviation){
+            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 3*standardDeviation){
                 moreThreeStd.add(p);
 //                it.remove();
-            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 2*standardDeviation){
+            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 2*standardDeviation){
                 moreTwoStd.add(p);
-            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES) > totalForAverage + 1*standardDeviation){
+            }else if(p.calculateSeventhWait(OncoTimeUnit.MINUTES, false) > totalForAverage + 1*standardDeviation){
                 moreOneStd.add(p);
             }
         }

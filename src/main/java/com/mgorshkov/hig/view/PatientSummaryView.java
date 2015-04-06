@@ -142,19 +142,19 @@ public class PatientSummaryView extends VerticalLayout implements View{
 
         if(p.getCurrentStage(c.getTime()).compareTo(s) > 1){
             if(s.equals(Stage.CT_SCAN)){
-                return p.calculateFirstWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateFirstWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }if(s.equals(Stage.INITIAL_CONTOUR)){
-                return p.calculateSecondWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateSecondWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }if(s.equals(Stage.MD_CONTOUR)){
-                return p.calculateThirdWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateThirdWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }if(s.equals(Stage.CT_PLANNING_SHEET)){
-                return p.calculateFourthWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateFourthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }if(s.equals(Stage.DOSE_CALCULATION)){
-                return p.calculateFifthWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateFifthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }if(s.equals(Stage.MD_APPROVE)){
-                return p.calculateSixthWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateSixthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }if(s.equals(Stage.PHYSICS_QA)){
-                return p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit());
+                return p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays());
             }
         }else if(p.getCurrentStage(c.getTime()).compareTo(s) == 0){
             Iterator<DataPoint> it = p.getDataPoints().iterator();

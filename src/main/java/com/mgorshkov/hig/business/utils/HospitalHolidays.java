@@ -129,4 +129,28 @@ public class HospitalHolidays {
     public boolean isDayOff(Date input){
         return isWeekend(input) || isHoliday(input);
     }
+
+    public long removeHolidays(Date d1, Date d2){
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+
+        c1.setTime(d1);
+        c2.setTime(d2);
+
+        if((c1.get(Calendar.DATE) == c2.get(Calendar.DATE)) && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)){
+            return 86400000/2;
+        }
+
+        int numberOfDays = 0;
+        while (c1.before(c2)) {
+            if(!isDayOff(c1.getTime())){
+                numberOfDays++;
+                c1.add(Calendar.DATE,1);
+            }else{
+                c1.add(Calendar.DATE,1);
+            }
+        }
+
+        return ((long) numberOfDays) * 86400000;
+    }
 }

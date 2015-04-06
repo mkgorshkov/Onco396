@@ -1,6 +1,8 @@
 package com.mgorshkov.hig.model;
 
+import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.business.entities.Priority;
+import com.mgorshkov.hig.business.utils.HospitalHolidays;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
 import com.mgorshkov.hig.model.enums.PriorityCode;
 import com.mgorshkov.hig.model.enums.Stage;
@@ -20,6 +22,7 @@ public class Patient {
     private DiagnosisModel diagnosis;
     private PriorityCode priorityCode;
     private int oncologist;
+    private HospitalHolidays hospitalHolidays = new HospitalHolidays();
 
     public Patient(int patient){
         PatientSerNum = patient;
@@ -52,7 +55,7 @@ public class Patient {
         DataPoints = dataPoints;
     }
 
-    public double calculateFirstWait(OncoTimeUnit t){
+    public double calculateFirstWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -68,7 +71,13 @@ public class Patient {
             }
         }
 
-        long duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        long duration = 0;
+
+        if(remove){
+            duration = hospitalHolidays.removeHolidays(a.getTimePoint(), b.getTimePoint());
+        }else {
+            duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        }
 
         if(TimeUnit.MILLISECONDS.toMinutes(duration) > 50400){
             return 0;
@@ -85,7 +94,7 @@ public class Patient {
         return minutes;
     }
 
-    public double calculateSecondWait(OncoTimeUnit t){
+    public double calculateSecondWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -101,7 +110,14 @@ public class Patient {
             }
         }
 
-        long duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        long duration = 0;
+
+        if(remove){
+            duration = hospitalHolidays.removeHolidays(a.getTimePoint(), b.getTimePoint());
+        }else {
+            duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        }
+
 
         if(TimeUnit.MILLISECONDS.toMinutes(duration) > 50400){
             return 0;
@@ -118,7 +134,7 @@ public class Patient {
         return minutes;
     }
 
-    public double calculateThirdWait(OncoTimeUnit t){
+    public double calculateThirdWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -134,7 +150,14 @@ public class Patient {
             }
         }
 
-        long duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        long duration = 0;
+
+        if(remove){
+            duration = hospitalHolidays.removeHolidays(a.getTimePoint(), b.getTimePoint());
+        }else {
+            duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        }
+
 
         if(TimeUnit.MILLISECONDS.toMinutes(duration) > 50400){
             return 0;
@@ -151,7 +174,7 @@ public class Patient {
         return minutes;
     }
 
-    public double calculateFourthWait(OncoTimeUnit t){
+    public double calculateFourthWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -167,7 +190,14 @@ public class Patient {
             }
         }
 
-        long duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        long duration = 0;
+
+        if(remove){
+            duration = hospitalHolidays.removeHolidays(a.getTimePoint(), b.getTimePoint());
+        }else {
+            duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        }
+
 
         if(TimeUnit.MILLISECONDS.toMinutes(duration) > 50400){
             return 0;
@@ -184,7 +214,7 @@ public class Patient {
         return minutes;
     }
 
-    public double calculateFifthWait(OncoTimeUnit t){
+    public double calculateFifthWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -217,7 +247,7 @@ public class Patient {
         return minutes;
     }
 
-    public double calculateSixthWait(OncoTimeUnit t){
+    public double calculateSixthWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -233,7 +263,14 @@ public class Patient {
             }
         }
 
-        long duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        long duration = 0;
+
+        if(remove){
+            duration = hospitalHolidays.removeHolidays(a.getTimePoint(), b.getTimePoint());
+        }else {
+            duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        }
+
 
         if(TimeUnit.MILLISECONDS.toMinutes(duration) > 50400){
             return 0;
@@ -250,7 +287,7 @@ public class Patient {
         return minutes;
     }
 
-    public double calculateSeventhWait(OncoTimeUnit t){
+    public double calculateSeventhWait(OncoTimeUnit t, boolean remove){
         Iterator<DataPoint> it = DataPoints.iterator();
 
         DataPoint a = null;
@@ -266,7 +303,14 @@ public class Patient {
             }
         }
 
-        long duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        long duration = 0;
+
+        if(remove){
+            duration = hospitalHolidays.removeHolidays(a.getTimePoint(), b.getTimePoint());
+        }else {
+            duration = b.getTimePoint().getTime() - a.getTimePoint().getTime();
+        }
+
 
         if(TimeUnit.MILLISECONDS.toMinutes(duration) > 50400){
             return 0;
@@ -332,8 +376,8 @@ public class Patient {
         return null;
     }
 
-    public double calculateTotalWaitingTime(OncoTimeUnit t){
-        return calculateFirstWait(t) + calculateSecondWait(t) + calculateThirdWait(t) + calculateFourthWait(t) + calculateFifthWait(t) + calculateSixthWait(t) + calculateSeventhWait(t);
+    public double calculateTotalWaitingTime(OncoTimeUnit t, boolean remove){
+        return calculateFirstWait(t, remove) + calculateSecondWait(t, remove) + calculateThirdWait(t, remove) + calculateFourthWait(t, remove) + calculateFifthWait(t, remove) + calculateSixthWait(t, remove) + calculateSeventhWait(t, remove);
     }
 
     public DiagnosisModel getDiagnosis() {
