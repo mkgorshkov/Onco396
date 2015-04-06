@@ -1,9 +1,8 @@
 package com.mgorshkov.hig.view;
 
 import com.mgorshkov.hig.MainUI;
+import com.mgorshkov.hig.business.utils.ChronologicalOrderSorter;
 import com.mgorshkov.hig.business.utils.WaitingTimeSorter;
-import com.mgorshkov.hig.filters.FilterByStageCodes;
-import com.mgorshkov.hig.model.DiagnosisModel;
 import com.mgorshkov.hig.model.Patient;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.PointClickEvent;
@@ -13,7 +12,6 @@ import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 
 import java.util.*;
@@ -21,10 +19,10 @@ import java.util.*;
 /**
  * @author Maxim Gorshkov <maxim.gorshkov<at>savoirfairelinux.com>
  */
-@CDIView(value = OncologistView.VIEW_NAME)
-public class OncologistView extends VerticalLayout implements View, ComboBox.ValueChangeListener {
+@CDIView(value = OncologistScatterView.VIEW_NAME)
+public class OncologistScatterView extends VerticalLayout implements View, ComboBox.ValueChangeListener {
 
-    public final static String VIEW_NAME = "OncologistView";
+    public final static String VIEW_NAME = "OncologistScatterView";
     Set<Patient> workingSet = new HashSet<>();
     List<Integer> oncologistSet = new ArrayList<>();
 
@@ -32,19 +30,12 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
     final static String[] LABELS = {"Stage 1: CT Scan - Initial Contour", "Stage 2: Initial Contour - MD Contour", "Stage 3: MD Contour - CT Planning Sheet", "Stage 4: CT Planning Sheet - Dose Calculation", "Stage 5: Dose Calculation - MD Approve", "Stage 6: MD Approve - Physics QA", "Stage 7: Physics QA - Ready for Treatement"};
 
     ComboBox selector = new ComboBox("Oncologist Select: ");
-    ComboBox diagnosis = new ComboBox("Diagnosis: ");
     Chart chart;
-    List<String> diagnosisChoices;
-
-    FilterByStageCodes filterStageCodes;
 
     HorizontalLayout topBar = new HorizontalLayout();
 
     public void init(Set<Patient> workingSet){
         this.workingSet = workingSet;
-        filterStageCodes = new FilterByStageCodes(workingSet);
-        diagnosisChoices = filterStageCodes.sortedkeys();
-        addDescriptionsToChoices();
 
         sortOncologistSet(((MainUI) getUI().getCurrent()).getOncologists());
         setSizeFull();
@@ -52,11 +43,21 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
         setMargin(true);
 
         setCombo();
+        setTopBar();
 
         addComponent(CHOOSE_SOMETHING);
         CHOOSE_SOMETHING.setWidthUndefined();
         setExpandRatio(CHOOSE_SOMETHING, 0.9f);
         setComponentAlignment(CHOOSE_SOMETHING, Alignment.MIDDLE_CENTER);
+    }
+
+
+    private void setTopBar() {
+        topBar.addComponent(selector);
+        topBar.setSizeFull();
+        topBar.setSpacing(true);
+        addComponent(topBar);
+        setExpandRatio(topBar, 0.1f);
     }
 
     private void setCombo(){
@@ -65,18 +66,6 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
         selector.setValue(null);
         selector.setWidth("100%");
         selector.addValueChangeListener(this);
-
-        diagnosis.addItems(diagnosisChoices);
-        diagnosis.setWidth("100%");
-        diagnosis.setValue(null);
-        diagnosis.addValueChangeListener(this);
-        diagnosis.setFilteringMode(FilteringMode.CONTAINS);
-
-        HorizontalLayout h = new HorizontalLayout(selector, diagnosis);
-        h.setSizeFull();
-        h.setSpacing(true);
-        addComponent(h);
-        setExpandRatio(h, 0.1f);
     }
 
     private void sortOncologistSet(Set<Integer> input){
@@ -84,8 +73,8 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
         Collections.sort(oncologistSet);
     }
 
-    private void setCharts(int oncologistSer, String diagnosis){
-        chart = new Chart(ChartType.BAR);
+    private void setCharts(int oncologistSer){
+        chart = new Chart(ChartType.LINE);
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Patients by Oncologist: " + oncologistSer);
@@ -98,7 +87,6 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
             }
         }
 
-        toDisplay = filterByDiagnosis(diagnosis, toDisplay);
 
         YAxis y = new YAxis();
         y.setTitle("Waiting Time " + (((MainUI) getUI()).getTimeUnit()));
@@ -113,7 +101,7 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
         legend.setReversed(true);
         conf.setLegend(legend);
 
-        ArrayList<Patient> sortedpatients = putInDescendingOrder(toDisplay);
+        ArrayList<Patient> sortedpatients = putInChronologicalOrder(toDisplay);
 
         String[] patientSerNums = new String[toDisplay.size()];
         for(int i = 0; i<sortedpatients.size(); i++){
@@ -183,62 +171,15 @@ public class OncologistView extends VerticalLayout implements View, ComboBox.Val
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         if(chart == null) removeComponent(CHOOSE_SOMETHING);
         if(chart != null) removeComponent(chart);
-
-        if(selector.getValue() == null && diagnosis.getValue() == null){
-            setCharts(oncologistSet.get(0), null);
-        }else if(selector.getValue() == null){
-            setCharts(oncologistSet.get(0), diagnosis.getValue().toString().substring(0, diagnosis.getValue().toString().indexOf(" ")));
-        }else if(diagnosis.getValue() == null){
-            setCharts((Integer) selector.getValue(), null);
-        }else{
-            int index1 = diagnosis.getValue().toString().indexOf("(");
-            int index2 = diagnosis.getValue().toString().indexOf(")");
-            setCharts((Integer) selector.getValue(), diagnosis.getValue().toString().substring(0, diagnosis.getValue().toString().indexOf(" ")));
-        }
+        setCharts((Integer) selector.getValue());
     }
 
-    private ArrayList<Patient> putInDescendingOrder(List<Patient> input){
+    private ArrayList<Patient> putInChronologicalOrder(List<Patient> input){
         ArrayList<Patient> sorted = new ArrayList<>();
         sorted.addAll(input);
-        Collections.sort(sorted, new WaitingTimeSorter());
+        Collections.sort(sorted, new ChronologicalOrderSorter());
 
         return sorted;
-    }
-
-    private void addDescriptionsToChoices(){
-        List<String> newDiagnosisChoices = new ArrayList<>();
-
-        for(String s : diagnosisChoices){
-            HashSet<DiagnosisModel> t = filterStageCodes.getBrokenSet().get(s);
-            Iterator<DiagnosisModel> it = t.iterator();
-
-            s += " (";
-            while(it.hasNext()){
-                DiagnosisModel d = it.next();
-                if(!s.contains(d.getDescription())) s = s+" "+d.getDescription();
-            }
-
-            s += ")";
-
-            newDiagnosisChoices.add(s);
-        }
-
-        diagnosisChoices.clear();
-        diagnosisChoices.addAll(newDiagnosisChoices);
-    }
-
-    private List<Patient> filterByDiagnosis(String diagnosis, List<Patient> input){
-        if(diagnosis != null && !diagnosis.isEmpty()) {
-            Iterator<Patient> it = input.iterator();
-            while (it.hasNext()) {
-                Patient p = it.next();
-                if (p.getDiagnosis() == null || p.getDiagnosis().getCategory().isEmpty() || p.getDiagnosis().getCategory() == null || !p.getDiagnosis().getCategory().contains(diagnosis)) {
-                    it.remove();
-                }
-            }
-        }
-
-        return input;
     }
 }
 
