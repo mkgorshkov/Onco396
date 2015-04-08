@@ -46,7 +46,7 @@ public class PatientSummaryView extends VerticalLayout implements View{
             }
         }
 
-        System.out.println("Scope: "+inScope.size());
+        System.out.println("Scope: " + inScope.size());
     }
 
     private void addDoctorChart() {
@@ -98,6 +98,7 @@ public class PatientSummaryView extends VerticalLayout implements View{
         conf.addSeries(new ListSeries("MD Approve", addValueByStage(Stage.DOSE_CALCULATION)));
         conf.addSeries(new ListSeries("Physics QA", addValueByStage(Stage.MD_APPROVE)));
         conf.addSeries(new ListSeries("Ready For Treatment", addValueByStage(Stage.PHYSICS_QA)));
+        conf.addSeries(new ListSeries("Prediction", addPredictions()));
 //
 //        Tooltip tooltip = new Tooltip();
 //        tooltip.setFormatter("this.y +' days estimated remaining for '+ this.series.name +' 6 days estimated total.'");
@@ -123,6 +124,67 @@ public class PatientSummaryView extends VerticalLayout implements View{
         }
 
         return third;
+    }
+
+    private Double[] addPredictions(){
+        Double[] n = new Double[inScope.size()];
+
+        int index = 0;
+        for(Patient p : inScope){
+            if(p.getPatientSerNum() == 105){
+                n[index] = 39816.0;
+            }
+            else if(p.getPatientSerNum() == 51) {
+                n[index] = 29756.0;
+            }else if(p.getPatientSerNum() == 44) {
+                n[index] = 13243.0;
+            }else if(p.getPatientSerNum() == 12) {
+                n[index] = 13299.0;
+            }else if(p.getPatientSerNum() == 13) {
+                n[index] = 13157.0;
+            }else if(p.getPatientSerNum() == 108) {
+                n[index] = 18697.0;
+            }else if(p.getPatientSerNum() == 98) {
+                n[index] = 41076.0;
+            }else if(p.getPatientSerNum() == 93) {
+                n[index] = 25601.0;
+            }else if(p.getPatientSerNum() == 16) {
+                n[index] = 20694.0;
+            }else if(p.getPatientSerNum() == 114) {
+                n[index] = 19777.0;
+            }else if(p.getPatientSerNum() == 42) {
+                n[index] = 17764.0;
+            }else if(p.getPatientSerNum() == 90) {
+                n[index] = 22682.0;
+            }else if(p.getPatientSerNum() == 84) {
+                n[index] = 20694.0;
+            }else if(p.getPatientSerNum() == 3) {
+                n[index] = 35834.0;
+            }else if(p.getPatientSerNum() == 55) {
+                n[index] = 19800.0;
+            }else if(p.getPatientSerNum() == 50) {
+                n[index] = 13448.0;
+            }else if(p.getPatientSerNum() == 115) {
+                n[index] = 14108.0;
+            }else if(p.getPatientSerNum() == 100) {
+                n[index] = 7281.0;
+            }else if(p.getPatientSerNum() == 5) {
+                n[index] = 14424.0;
+            }else if(p.getPatientSerNum() == 32) {
+                n[index] = 31412.0;
+            }else if(p.getPatientSerNum() == 2) {
+                n[index] = 20184.0;
+            }else if(p.getPatientSerNum() == 116) {
+                n[index] = 10790.0;
+            }else if(p.getPatientSerNum() == 580) {
+                n[index] = 47584.0;
+            }
+            index++;
+
+        }
+
+
+        return n;
     }
 
     public String[] addPatientSers(HashSet<Patient> input){
