@@ -29,8 +29,8 @@ public class Alias implements Serializable {
     @Size(max = 25)
     @Column(length = 25, nullable = false)
     private String AliasType;
-    @Size(max = 10)
-    @Column(length = 10, nullable = false)
+    @Size(max = 11)
+    @Column(length = 11, nullable = false)
     private Integer AliasUpdate;
     @Column(nullable = false)
     private Date LastUpdated;

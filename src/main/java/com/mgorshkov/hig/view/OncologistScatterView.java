@@ -74,7 +74,7 @@ public class OncologistScatterView extends VerticalLayout implements View, Combo
     }
 
     private void setCharts(int oncologistSer){
-        chart = new Chart(ChartType.LINE);
+        chart = new Chart(ChartType.BAR);
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Patients by Oncologist: " + oncologistSer);
