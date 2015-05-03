@@ -3,7 +3,10 @@ package com.mgorshkov.hig.view;
 import com.mgorshkov.hig.MainUI;
 import com.mgorshkov.hig.filters.FilterByStageCodes;
 import com.mgorshkov.hig.model.DataPoint;
+import com.mgorshkov.hig.model.DiagnosisModel;
 import com.mgorshkov.hig.model.Patient;
+import com.mgorshkov.hig.model.enums.OncoTimeUnit;
+import com.mgorshkov.hig.model.enums.WaitingTimeGroups;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.PointClickEvent;
 import com.vaadin.addon.charts.PointClickListener;
@@ -13,6 +16,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Not;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -41,6 +45,7 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         this.workingSet = workingSet;
         filterStageCodes = new FilterByStageCodes(workingSet);
         diagnosisChoices = filterStageCodes.sortedkeys();
+        addDescriptionsToChoices();
 
         setSizeFull();
         setSpacing(true);
@@ -65,6 +70,7 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         diagnosis.setNullSelectionItemId("All");
         diagnosis.setValue(null);
         diagnosis.addValueChangeListener(this);
+        diagnosis.setFilteringMode(FilteringMode.CONTAINS);
 
         HorizontalLayout h = new HorizontalLayout(selector, diagnosis);
         h.setSizeFull();
@@ -84,7 +90,7 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         String[] outList = new String[input.keySet().size()];
         int i = 0;
         for(String s : input.keySet()){
-            outList[i] = s;
+            outList[i] = input.get(s).get(0).getDiagnosis().getDescription() +" ("+s+")";
             i++;
         }
 
@@ -128,41 +134,6 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
             }
         }
 
-//        if (stage == 0) {
-//            for(Patient p : input.get(diagnosis.getValue()).size()){
-//                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
-//            }
-//        }else if(stage == 1){
-//            for(Patient p : input.get(diagnosis.getValue())){
-//                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
-//
-//            }
-//        }else if(stage == 2){
-//            for(Patient p : input.get(diagnosis.getValue())){
-//                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
-//
-//            }
-//        }else if(stage == 3){
-//            for(Patient p : input.get(diagnosis.getValue())){
-//                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
-//
-//            }
-//        }else if(stage == 4){
-//            for(Patient p : input.get(diagnosis.getValue())){
-//                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
-//
-//            }
-//        }else if(stage == 5){
-//            for(Patient p : input.get(diagnosis.getValue())){
-//                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
-//
-//            }
-//        }else if(stage == 6){
-//            for(Patient p : input.get(diagnosis.getValue())){
-//                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
-//            }
-//        }
-
         Number[] valuesToAdd = new Number[values.size()];
         for(int j = 0; j<valuesToAdd.length; j++){
             valuesToAdd[j] = values.get(j);
@@ -179,22 +150,24 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         chart.addPointClickListener(new PointClickListener() {
             @Override
             public void onClick(PointClickEvent pointClickEvent) {
-                drillDownGraph(stage, pointClickEvent.getCategory(), input.get(pointClickEvent.getCategory()));
+                int index1 = pointClickEvent.getCategory().indexOf("(");
+                int index2 = pointClickEvent.getCategory().indexOf(")");
+
+                drillDownGraph(stage, pointClickEvent.getCategory().substring(index1 + 1, index2), pointClickEvent.getCategory(), input.get(pointClickEvent.getCategory().substring(index1 + 1, index2)));
             }
         });
 
     }
 
-    private void drillDownGraph(final int stage, String category, List<Patient> patients){
+    private void drillDownGraph(final int stage, String category, String description, List<Patient> patients){
         removeComponent(chart);
         chart = new Chart(ChartType.COLUMN);
 
         Configuration conf = chart.getConfiguration();
         conf.setTitle(CHOICES[stage]);
-        conf.setSubTitle("Subcategory: "+category);
+        conf.setSubTitle("Subcategory: "+description);
 
         XAxis x = new XAxis();
-
         x.setCategories(patientSerNums(stage, new HashSet<Patient>(patients)));
         x.setTitle("Patient Serial Number");
         conf.addxAxis(x);
@@ -207,36 +180,36 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
 
         if (stage == 0) {
             for(Patient p : patients){
-                    values.add(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateFirstWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
             }
         }else if(stage == 1){
             for(Patient p : patients){
-                    values.add(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateSecondWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
 
             }
         }else if(stage == 2){
             for(Patient p : patients){
-                    values.add(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateThirdWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
 
             }
         }else if(stage == 3){
             for(Patient p : patients){
-                    values.add(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateFourthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
 
             }
         }else if(stage == 4){
             for(Patient p : patients){
-                    values.add(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateFifthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
 
             }
         }else if(stage == 5){
             for(Patient p : patients){
-                    values.add(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateSixthWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
 
             }
         }else if(stage == 6){
             for(Patient p : patients){
-                    values.add(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit()));
+                    values.add(classify(p.calculateSeventhWait(((MainUI) getUI()).getTimeUnit(), ((MainUI) getUI()).isRemoveWeekendHolidays())));
             }
         }
 
@@ -259,9 +232,10 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
                 final Window w = new Window();
                 VerticalLayout v = new VerticalLayout();
                 w.setContent(v);
-                Button b = new Button("Go to specific view.");
-                v.addComponent(new Label("Starts on a Friday: " + checkIfWeekend(pointClickEvent.getCategory(), stage)));
+                Button b = new Button("Go to specific view");
+                Button b2 = new Button("Go to calendar view");
                 v.addComponent(b);
+                v.addComponent(b2);
 
                 w.center();
                 w.setWidth("300px");
@@ -274,6 +248,15 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
                         w.close();
                         ((MainUI) getUI()).setCrtUser(pointClickEvent.getCategory());
                         getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
+                    }
+                });
+
+                b2.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent clickEvent) {
+                        w.close();
+                        ((MainUI) getUI()).setCrtUser(pointClickEvent.getCategory());
+                        getUI().getNavigator().navigateTo(CalendarView.VIEW_ID);
                     }
                 });
 
@@ -325,39 +308,21 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
         return serialToReturn;
     }
 
-    private boolean checkIfWeekend(String patientInfo, int stage){
-        Patient p = isInPatientData(Integer.parseInt(patientInfo));
-        Iterator<DataPoint> points = p.getDataPoints().iterator();
-
-        DataPoint d = null;
-        int i = 0;
-        while(i<=stage){
-            d = points.next();
-            i++;
-        }
-
-        return d.startsOnFriday();
-    }
-
 
     private HashMap<String, List<Patient>> filterByDiagnosis(){
         HashMap<String, List<Patient>> newMap = new HashMap<>();
 
-//        if(diagnosis.getValue() == null){
-//            return workingSet;
-//        }
-
-        String diag = diagnosis.getValue().toString();
-        Set<String> subDiagnosis = (HashSet) filterStageCodes.getBrokenSet().get(diag);
+        String diag = diagnosis.getValue().toString().substring(0, diagnosis.getValue().toString().indexOf(" "));
+        Set<DiagnosisModel> subDiagnosis = (HashSet) filterStageCodes.getBrokenSet().get(diag);
 
         for(Patient p : workingSet){
             if(subDiagnosis.contains(p.getDiagnosis())){
-                if(newMap.containsKey(p.getDiagnosis())){
-                    newMap.get(p.getDiagnosis()).add(p);
+                if(newMap.containsKey(p.getDiagnosis().getCategory())){
+                    newMap.get(p.getDiagnosis().getCategory()).add(p);
                 }else{
                     ArrayList<Patient> list = new ArrayList<>();
                     list.add(p);
-                    newMap.put(p.getDiagnosis(), list);
+                    newMap.put(p.getDiagnosis().getCategory(), list);
                 }
             }
         }
@@ -400,6 +365,46 @@ public class ChartsDiagnosisView extends VerticalLayout implements View,ComboBox
             }
         }
         return null;
+    }
+
+    private double classify(Double input){
+        if(((MainUI) UI.getCurrent()).isBreakIntoGroups()){
+            WaitingTimeGroups g = WaitingTimeGroups.returnClosestWaitingTime(input, (((MainUI) UI.getCurrent()).getTimeUnit()));
+
+            if ((((MainUI) UI.getCurrent()).getTimeUnit() == OncoTimeUnit.DAYS)) {
+                return g.getValue();
+            }
+            else if ((((MainUI) UI.getCurrent()).getTimeUnit() == OncoTimeUnit.HOURS)) {
+                return g.getValueAsHours();
+            }
+            else if ((((MainUI) UI.getCurrent()).getTimeUnit() == OncoTimeUnit.MINUTES)) {
+                return g.getValueAsMinutes();
+            }
+        }
+
+        return input;
+    }
+
+    private void addDescriptionsToChoices(){
+        List<String> newDiagnosisChoices = new ArrayList<>();
+
+        for(String s : diagnosisChoices){
+            HashSet<DiagnosisModel> t = filterStageCodes.getBrokenSet().get(s);
+            Iterator<DiagnosisModel> it = t.iterator();
+
+            s += " (";
+            while(it.hasNext()){
+                DiagnosisModel d = it.next();
+                if(!s.contains(d.getDescription())) s = s+" "+d.getDescription();
+            }
+
+            s += ")";
+
+            newDiagnosisChoices.add(s);
+        }
+
+        diagnosisChoices.clear();
+        diagnosisChoices.addAll(newDiagnosisChoices);
     }
 }
 

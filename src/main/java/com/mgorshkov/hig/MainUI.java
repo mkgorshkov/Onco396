@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.mgorshkov.hig.model.DiagnosisModel;
 import com.mgorshkov.hig.model.Patient;
 import com.mgorshkov.hig.business.services.SessionBean;
 import com.mgorshkov.hig.model.enums.OncoTimeUnit;
@@ -40,16 +41,20 @@ public class MainUI extends UI {
     final VerticalLayout layout = new VerticalLayout();
     private Set<Patient> patientData;
     private OncoTimeUnit globalTimeUnit;
-    private Set<String> diagnosis;
+    private Set<DiagnosisModel> diagnosis;
     private String crtUser;
     private Set<Integer> oncologists;
     private Set<Set<Patient>> extremeUsers;
+    private boolean breakIntoGroups;
+    private boolean removeWeekendHolidays;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         patientData = new HashSet<>();
         globalTimeUnit = OncoTimeUnit.MINUTES;
         diagnosis = new HashSet<>();
+        breakIntoGroups = false;
+        removeWeekendHolidays = false;
 
         layout.setMargin(true);
         setContent(layout);
@@ -92,11 +97,11 @@ public class MainUI extends UI {
         this.patientData = patientData;
     }
 
-    public Set<String> getDiagnosis() {
+    public Set<DiagnosisModel> getDiagnosis() {
         return diagnosis;
     }
 
-    public void setDiagnosis(HashSet<String> diagnosis) {
+    public void setDiagnosis(HashSet<DiagnosisModel> diagnosis) {
         this.diagnosis = diagnosis;
     }
 
@@ -122,5 +127,21 @@ public class MainUI extends UI {
 
     public void setExtremeUsers(Set<Set<Patient>> extremeUsers) {
         this.extremeUsers = extremeUsers;
+    }
+
+    public boolean isBreakIntoGroups() {
+        return breakIntoGroups;
+    }
+
+    public void setBreakIntoGroups(boolean breakIntoGroups) {
+        this.breakIntoGroups = breakIntoGroups;
+    }
+
+    public boolean isRemoveWeekendHolidays() {
+        return removeWeekendHolidays;
+    }
+
+    public void setRemoveWeekendHolidays(boolean removeWeekendHolidays) {
+        this.removeWeekendHolidays = removeWeekendHolidays;
     }
 }

@@ -43,6 +43,10 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     Button outlierAnalysis = new Button("Outlier Analysis", FontAwesome.SEARCH);
     Button timelineView = new Button("Patient Timeline", FontAwesome.CALENDAR);
     Button calendarView = new Button("Calendar View", FontAwesome.CALENDAR_O);
+    Button oncologistScatterView = new Button("Oncologists Scatter", FontAwesome.FILE_TEXT_O);
+
+    CheckBox grouping = new CheckBox("Group waiting times");
+    CheckBox weekendRemove = new CheckBox("Remove weekends and holidays");
 
     Button save = new Button(FontAwesome.SAVE);
     Button cancel = new Button(FontAwesome.TIMES);
@@ -72,12 +76,14 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         outlierAnalysis.addClickListener(this);
         timelineView.addClickListener(this);
         calendarView.addClickListener(this);
+        oncologistScatterView.addClickListener(this);
 
         buttons.addComponent(charts);
         buttons.addComponent(chartsByDiagnosis);
         buttons.addComponent(chartsTimeline);
+        buttons.addComponent(oncologistScatterView);
         buttons.addComponent(patients);
-        buttons.addComponent(timelineView);
+        buttons2.addComponent(timelineView);
         buttons2.addComponent(calendarView);
         buttons2.addComponent(exportExcel);
         buttons2.addComponent(outlierAnalysis);
@@ -120,17 +126,23 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
     }
 
     private void setWindow(){
+        globalLayout.removeAllComponents();
+
         options.center();
 
         timeUnit.addItems(OncoTimeUnit.values());
         timeUnit.setNullSelectionAllowed(false);
         timeUnit.setValue(((MainUI) getUI()).getTimeUnit());
 
-
+        grouping.setValue(((MainUI) getUI()).isBreakIntoGroups());
+        weekendRemove.setValue(((MainUI) getUI()).isRemoveWeekendHolidays());
 
         globalLayout.setMargin(true);
         globalLayout.setSpacing(true);
         globalLayout.addComponent(timeUnit);
+        globalLayout.addComponent(grouping);
+        globalLayout.addComponent(weekendRemove);
+
         globalLayout.addComponent(new HorizontalLayout(save, cancel));
     }
 
@@ -154,13 +166,15 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
         }else if(clickEvent.getSource().equals(patients)){
             getUI().getNavigator().navigateTo(PatientView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(exportExcel)){
-            ExportToCSV e = new ExportToCSV(((MainUI) getUI()).getPatientData(), (((MainUI) getUI()).getTimeUnit()));
+            ExportToCSV e = new ExportToCSV(((MainUI) getUI()).getPatientData(), (((MainUI) getUI()).getTimeUnit()), ((MainUI) getUI()).isRemoveWeekendHolidays());
         }else if(clickEvent.getSource().equals(globalOptionsButton)){
             UI.getCurrent().addWindow(options);
         }else if(clickEvent.getSource().equals(save)){
             ((MainUI) getUI()).setTimeUnit((OncoTimeUnit) timeUnit.getValue());
+            ((MainUI) getUI()).setBreakIntoGroups(grouping.getValue());
+            ((MainUI) getUI()).setRemoveWeekendHolidays(weekendRemove.getValue());
             options.close();
-            Notification.show("Time Unit Updated", Notification.Type.TRAY_NOTIFICATION);
+            Notification.show("Time Unit And Grouping Updated", Notification.Type.TRAY_NOTIFICATION);
         }else if(clickEvent.getSource().equals(cancel)){
             options.close();
         }else if(clickEvent.getSource().equals(outlierAnalysis)){
@@ -169,6 +183,8 @@ public class MainView extends VerticalLayout implements View, Button.ClickListen
             getUI().getNavigator().navigateTo(PatientSummaryView.VIEW_NAME);
         }else if(clickEvent.getSource().equals(calendarView)){
             getUI().getNavigator().navigateTo(CalendarView.VIEW_ID);
+        }else if(clickEvent.getSource().equals(oncologistScatterView)){
+            getUI().getNavigator().navigateTo(OncologistScatterView.VIEW_NAME);
         }
     }
 }

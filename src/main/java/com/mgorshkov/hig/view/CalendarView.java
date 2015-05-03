@@ -47,6 +47,17 @@ public class CalendarView extends VerticalLayout implements View, ComboBox.Value
         setCalendar(1);
     }
 
+    public void initAndSetCalendar(Set<Patient> workingSet, int crtUser){
+        this.workingSet = workingSet;
+
+        setSizeFull();
+        setMargin(true);
+
+        setCombo();
+        setCalendar(crtUser);
+        selector.setValue(crtUser);
+    }
+
     private void setCalendar(int patientID){
 
         Patient crt = isInPatientData(patientID);
@@ -154,7 +165,11 @@ public class CalendarView extends VerticalLayout implements View, ComboBox.Value
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         removeAllComponents();
-        init(((MainUI) getUI()).getPatientData());
+        if (((MainUI) getUI()).getCrtUser() != null) {
+            initAndSetCalendar(((MainUI) getUI()).getPatientData(), Integer.parseInt(((MainUI) getUI()).getCrtUser()));
+        }else{
+            init(((MainUI) getUI()).getPatientData());
+        }
     }
 
     @Override
